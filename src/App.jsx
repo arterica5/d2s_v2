@@ -7,6 +7,8 @@ import { CostWorkspacePage } from "./pages/CostWorkspacePage.jsx";
 import { DesignChangeRequestPage } from "./pages/DesignChangeRequestPage.jsx";
 import { SourcingWorkspacePage } from "./pages/SourcingWorkspacePage.jsx";
 import { RfxDetailPage } from "./pages/RfxDetailPage.jsx";
+import { SupplierListPage } from "./pages/SupplierListPage.jsx";
+import { SupplierDetailPage } from "./pages/SupplierDetailPage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -55,9 +57,10 @@ export default function App() {
           element={<Placeholder label="APQP Workspace" />}
         />
         <Route path="/items" element={<Placeholder label="Items" />} />
+        <Route path="/suppliers" element={<SupplierListPage />} />
         <Route
-          path="/suppliers"
-          element={<Placeholder label="Suppliers" />}
+          path="/suppliers/:supplierId"
+          element={<SupplierDetailPage />}
         />
         <Route
           path="/categories"
