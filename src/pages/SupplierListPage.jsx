@@ -12,6 +12,8 @@ import {
   FileText,
 } from "lucide-react";
 import { PageHeader } from "../components/PageHeader.jsx";
+import { KpiCard } from "../components/KpiCard.jsx";
+import { FilterSelect } from "../components/FilterSelect.jsx";
 import {
   SUPPLIERS,
   SUPPLIER_TIERS,
@@ -264,52 +266,6 @@ function Metric({ label, value, tone, icon: Icon }) {
         {Icon && <Icon size={11} />}
         {value}
       </p>
-    </div>
-  );
-}
-
-function FilterSelect({ label, value, onChange, options }) {
-  return (
-    <label className="inline-flex items-center gap-xs px-md py-xs rounded-md text-sm text-text-primary bg-surface-paper border border-border">
-      <Filter size={12} className="text-text-secondary" />
-      <span className="text-text-secondary text-xs">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="bg-transparent font-semibold focus:outline-none cursor-pointer"
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-function KpiCard({ label, value, icon: Icon, tone, hint }) {
-  const color =
-    tone === "success"
-      ? "var(--color-success-main)"
-      : tone === "warning"
-        ? "var(--color-warning-main)"
-        : tone === "error"
-          ? "var(--color-error-main)"
-          : "var(--color-text-primary)";
-  return (
-    <div className="bg-surface-paper border border-border rounded-xl p-lg shadow-elevation-2">
-      <p className="text-xs text-text-secondary uppercase tracking-wide">
-        {label}
-      </p>
-      <p
-        className="text-h3 mt-2xs font-bold inline-flex items-center gap-xs"
-        style={{ color, letterSpacing: "-0.01em" }}
-      >
-        {Icon && <Icon size={20} />}
-        {value}
-      </p>
-      {hint && <p className="text-xs text-text-secondary mt-2xs">{hint}</p>}
     </div>
   );
 }

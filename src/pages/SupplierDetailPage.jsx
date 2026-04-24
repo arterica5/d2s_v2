@@ -26,6 +26,7 @@ import { BOM_NODES } from "../data/mockBOM.js";
 import { RFX_LIST, RFX_STATUS } from "../data/mockSourcing.js";
 import { useCollaboration } from "../context/CollaborationContext.jsx";
 
+import { Th } from "../components/Th.jsx";
 const KRW = new Intl.NumberFormat("en-US");
 
 const TABS = [
@@ -589,17 +590,6 @@ function Stat({ icon: Icon, label, value }) {
         {value}
       </p>
     </div>
-  );
-}
-
-function Th({ children, className = "" }) {
-  return (
-    <th
-      className={`text-left font-semibold px-md py-sm uppercase tracking-wide ${className}`}
-      style={{ letterSpacing: "0.04em" }}
-    >
-      {children}
-    </th>
   );
 }
 

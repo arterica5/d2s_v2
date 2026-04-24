@@ -7,6 +7,7 @@ import {
   Building2,
 } from "lucide-react";
 import { PageHeader } from "../components/PageHeader.jsx";
+import { KpiCard } from "../components/KpiCard.jsx";
 import {
   CATEGORIES,
   STRATEGY_GROUPS,
@@ -207,31 +208,6 @@ function GroupColumn({ group, categories }) {
           </li>
         ))}
       </ul>
-    </div>
-  );
-}
-
-function KpiCard({ label, value, tone, icon: Icon }) {
-  const color =
-    tone === "primary"
-      ? "var(--color-primary-main)"
-      : tone === "info"
-        ? "var(--color-info-main)"
-        : tone === "success"
-          ? "var(--color-success-main)"
-          : "var(--color-text-primary)";
-  return (
-    <div className="bg-surface-paper border border-border rounded-xl p-lg shadow-elevation-2">
-      <p className="text-xs text-text-secondary uppercase tracking-wide">
-        {label}
-      </p>
-      <p
-        className="text-h3 mt-2xs font-bold inline-flex items-center gap-xs"
-        style={{ color, letterSpacing: "-0.01em" }}
-      >
-        {Icon && <Icon size={18} />}
-        {value}
-      </p>
     </div>
   );
 }

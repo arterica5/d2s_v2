@@ -24,6 +24,8 @@ import {
 import { useCollaboration } from "../context/CollaborationContext.jsx";
 import { useItemDetail } from "../context/ItemDetailContext.jsx";
 
+import { KpiCard } from "../components/KpiCard.jsx";
+import { Th } from "../components/Th.jsx";
 const VIEWS = [
   { id: "ebom", label: "E-BOM", hint: "Engineering hierarchy" },
   { id: "sourcing", label: "Sourcing BOM", hint: "Flattened by end item" },
@@ -354,40 +356,6 @@ export function BOMWorkspacePage() {
         </div>
       </div>
     </>
-  );
-}
-
-function Th({ children, className = "" }) {
-  return (
-    <th
-      className={`text-left font-semibold px-md py-sm uppercase tracking-wide ${className}`}
-      style={{ letterSpacing: "0.04em" }}
-    >
-      {children}
-    </th>
-  );
-}
-
-function KpiCard({ label, value, tone, hint }) {
-  const color =
-    tone === "error"
-      ? "var(--color-error-main)"
-      : tone === "success"
-        ? "var(--color-success-main)"
-        : "var(--color-text-primary)";
-  return (
-    <div className="bg-surface-paper border border-border rounded-xl p-lg shadow-elevation-2">
-      <p className="text-xs text-text-secondary uppercase tracking-wide">
-        {label}
-      </p>
-      <p
-        className="text-h3 mt-2xs font-bold"
-        style={{ color, letterSpacing: "-0.01em" }}
-      >
-        {value}
-      </p>
-      {hint && <p className="text-xs text-text-secondary mt-2xs">{hint}</p>}
-    </div>
   );
 }
 

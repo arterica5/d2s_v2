@@ -18,6 +18,8 @@ import { PageHeader } from "../components/PageHeader.jsx";
 import { BOM_META, BOM_NODES } from "../data/mockBOM.js";
 import { flattenAll } from "../data/costAnalysis.js";
 
+import { KpiCard } from "../components/KpiCard.jsx";
+import { FilterBtn } from "../components/FilterBtn.jsx";
 const KRW = new Intl.NumberFormat("en-US");
 
 const DELTA_META = {
@@ -442,47 +444,6 @@ function Meta({ label, value }) {
         {label}
       </p>
       <p className="text-sm mt-2xs truncate">{value}</p>
-    </div>
-  );
-}
-
-function FilterBtn({ label, active, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`px-md py-xs rounded-md text-sm font-semibold transition-colors duration-fast ${
-        active
-          ? "bg-surface-paper text-text-primary shadow-elevation-2"
-          : "text-text-secondary hover:text-text-primary"
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
-
-function KpiCard({ label, value, icon: Icon, tone, hint }) {
-  const color =
-    tone === "success"
-      ? "var(--color-success-main)"
-      : tone === "warning"
-        ? "var(--color-warning-main)"
-        : tone === "error"
-          ? "var(--color-error-main)"
-          : "var(--color-text-primary)";
-  return (
-    <div className="bg-surface-paper border border-border rounded-xl p-lg shadow-elevation-2">
-      <p className="text-xs text-text-secondary uppercase tracking-wide">
-        {label}
-      </p>
-      <p
-        className="text-h3 mt-2xs font-bold inline-flex items-center gap-xs"
-        style={{ color, letterSpacing: "-0.01em" }}
-      >
-        {Icon && <Icon size={20} />}
-        {value}
-      </p>
-      {hint && <p className="text-xs text-text-secondary mt-2xs">{hint}</p>}
     </div>
   );
 }

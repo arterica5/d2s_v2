@@ -23,6 +23,7 @@ import { BOM_META } from "../data/mockBOM.js";
 import { findRfx, RFX_STATUS, RFX_TYPES } from "../data/mockSourcing.js";
 import { useCollaboration } from "../context/CollaborationContext.jsx";
 
+import { Th } from "../components/Th.jsx";
 const KRW = new Intl.NumberFormat("en-US");
 
 export function RfxDetailPage() {
@@ -404,16 +405,5 @@ function MetaPair({ icon: Icon, label, value }) {
         <p className="text-sm font-semibold">{value}</p>
       </div>
     </div>
-  );
-}
-
-function Th({ children, className = "" }) {
-  return (
-    <th
-      className={`text-left font-semibold px-md py-sm uppercase tracking-wide ${className}`}
-      style={{ letterSpacing: "0.04em" }}
-    >
-      {children}
-    </th>
   );
 }

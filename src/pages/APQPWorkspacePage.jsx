@@ -28,6 +28,9 @@ import {
 import { useCollaboration } from "../context/CollaborationContext.jsx";
 import { useItemDetail } from "../context/ItemDetailContext.jsx";
 
+import { KpiCard } from "../components/KpiCard.jsx";
+import { Th } from "../components/Th.jsx";
+import { FilterBtn } from "../components/FilterBtn.jsx";
 export function APQPWorkspacePage() {
   const summary = useMemo(() => summarizeAPQP(), []);
   const [phaseFilter, setPhaseFilter] = useState("all");
@@ -535,57 +538,5 @@ function RiskDot({ level }) {
       />
       {level}
     </span>
-  );
-}
-
-function Th({ children, className = "" }) {
-  return (
-    <th
-      className={`text-left font-semibold px-md py-sm uppercase tracking-wide ${className}`}
-      style={{ letterSpacing: "0.04em" }}
-    >
-      {children}
-    </th>
-  );
-}
-
-function FilterBtn({ label, active, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`px-sm py-2xs rounded-sm text-xs font-semibold transition-colors duration-fast ${
-        active
-          ? "bg-surface-paper text-text-primary shadow-elevation-2"
-          : "text-text-secondary hover:text-text-primary"
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
-
-function KpiCard({ label, value, icon: Icon, tone, hint }) {
-  const color =
-    tone === "success"
-      ? "var(--color-success-main)"
-      : tone === "warning"
-        ? "var(--color-warning-main)"
-        : tone === "error"
-          ? "var(--color-error-main)"
-          : "var(--color-text-primary)";
-  return (
-    <div className="bg-surface-paper border border-border rounded-xl p-lg shadow-elevation-2">
-      <p className="text-xs text-text-secondary uppercase tracking-wide">
-        {label}
-      </p>
-      <p
-        className="text-h3 mt-2xs font-bold inline-flex items-center gap-xs"
-        style={{ color, letterSpacing: "-0.01em" }}
-      >
-        {Icon && <Icon size={20} />}
-        {value}
-      </p>
-      {hint && <p className="text-xs text-text-secondary mt-2xs">{hint}</p>}
-    </div>
   );
 }

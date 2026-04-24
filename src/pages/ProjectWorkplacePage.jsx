@@ -46,6 +46,7 @@ import { RFX_LIST, summarizeRfx } from "../data/mockSourcing.js";
 import { TOTAL_UNREAD, COLLAB_CHANNELS } from "../data/mockCollaboration.js";
 import { useCollaboration } from "../context/CollaborationContext.jsx";
 
+import { KpiCard } from "../components/KpiCard.jsx";
 const KRW = new Intl.NumberFormat("en-US");
 
 export function ProjectWorkplacePage() {
@@ -443,34 +444,6 @@ function Meta({ icon: Icon, label, value }) {
         </p>
         <p className="text-sm font-semibold">{value}</p>
       </div>
-    </div>
-  );
-}
-
-function KpiCard({ label, value, tone, icon: Icon, hint }) {
-  const color =
-    tone === "error"
-      ? "var(--color-error-main)"
-      : tone === "warning"
-        ? "var(--color-warning-main)"
-        : tone === "success"
-          ? "var(--color-success-main)"
-          : tone === "info"
-            ? "var(--color-info-main)"
-            : "var(--color-text-primary)";
-  return (
-    <div className="bg-surface-paper border border-border rounded-xl p-lg shadow-elevation-2">
-      <p className="text-xs text-text-secondary uppercase tracking-wide">
-        {label}
-      </p>
-      <p
-        className="text-h3 mt-2xs font-bold inline-flex items-center gap-xs"
-        style={{ color, letterSpacing: "-0.01em" }}
-      >
-        {Icon && <Icon size={20} />}
-        {value}
-      </p>
-      {hint && <p className="text-xs text-text-secondary mt-2xs">{hint}</p>}
     </div>
   );
 }

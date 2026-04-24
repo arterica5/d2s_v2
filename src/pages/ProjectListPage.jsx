@@ -16,6 +16,9 @@ import {
 } from "lucide-react";
 import { PageHeader } from "../components/PageHeader.jsx";
 import { PhaseStepper } from "../components/PhaseStepper.jsx";
+import { KpiCard } from "../components/KpiCard.jsx";
+import { Th } from "../components/Th.jsx";
+import { FilterSelect } from "../components/FilterSelect.jsx";
 import {
   PHASES,
   PROJECT_TYPES,
@@ -383,37 +386,6 @@ function ProjectCard({ project: p }) {
 
 /* ───────────────────── Atoms ───────────────────── */
 
-function Th({ children, className = "" }) {
-  return (
-    <th
-      className={`text-left font-semibold px-md py-sm uppercase tracking-wide ${className}`}
-      style={{ letterSpacing: "0.04em" }}
-    >
-      {children}
-    </th>
-  );
-}
-
-function FilterSelect({ label, value, onChange, options }) {
-  return (
-    <label className="inline-flex items-center gap-xs px-md py-xs rounded-md text-sm text-text-primary bg-surface-paper border border-border">
-      <Filter size={12} className="text-text-secondary" />
-      <span className="text-text-secondary text-xs">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="bg-transparent font-semibold focus:outline-none cursor-pointer"
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
 function LayoutToggleBtn({ icon: Icon, active, onClick, label }) {
   return (
     <button
@@ -428,32 +400,6 @@ function LayoutToggleBtn({ icon: Icon, active, onClick, label }) {
     >
       <Icon size={14} />
     </button>
-  );
-}
-
-function KpiCard({ label, value, tone, icon: Icon, hint }) {
-  const color =
-    tone === "success"
-      ? "var(--color-success-main)"
-      : tone === "warning"
-        ? "var(--color-warning-main)"
-        : tone === "error"
-          ? "var(--color-error-main)"
-          : "var(--color-text-primary)";
-  return (
-    <div className="bg-surface-paper border border-border rounded-xl p-lg shadow-elevation-2">
-      <p className="text-xs text-text-secondary uppercase tracking-wide">
-        {label}
-      </p>
-      <p
-        className="text-h3 mt-2xs font-bold inline-flex items-center gap-xs"
-        style={{ color, letterSpacing: "-0.01em" }}
-      >
-        {Icon && <Icon size={20} />}
-        {value}
-      </p>
-      {hint && <p className="text-xs text-text-secondary mt-2xs">{hint}</p>}
-    </div>
   );
 }
 

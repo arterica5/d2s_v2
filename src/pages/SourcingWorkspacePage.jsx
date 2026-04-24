@@ -14,6 +14,9 @@ import {
 } from "lucide-react";
 import { PageHeader } from "../components/PageHeader.jsx";
 import { BOM_META } from "../data/mockBOM.js";
+import { KpiCard } from "../components/KpiCard.jsx";
+import { Th } from "../components/Th.jsx";
+import { FilterSelect } from "../components/FilterSelect.jsx";
 import {
   RFX_LIST,
   RFX_STATUS,
@@ -287,65 +290,6 @@ function RfxRow({ rfx }) {
 }
 
 /* ───────────────────── Atoms ───────────────────── */
-
-function Th({ children, className = "" }) {
-  return (
-    <th
-      className={`text-left font-semibold px-md py-sm uppercase tracking-wide ${className}`}
-      style={{ letterSpacing: "0.04em" }}
-    >
-      {children}
-    </th>
-  );
-}
-
-function FilterSelect({ label, value, onChange, options }) {
-  return (
-    <label className="inline-flex items-center gap-xs px-md py-xs rounded-md text-sm text-text-primary bg-surface-paper border border-border">
-      <Filter size={12} className="text-text-secondary" />
-      <span className="text-text-secondary text-xs">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="bg-transparent font-semibold focus:outline-none cursor-pointer"
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-function KpiCard({ label, value, icon: Icon, tone, hint }) {
-  const color =
-    tone === "info"
-      ? "var(--color-info-main)"
-      : tone === "success"
-        ? "var(--color-success-main)"
-        : tone === "warning"
-          ? "var(--color-warning-main)"
-          : tone === "error"
-            ? "var(--color-error-main)"
-            : "var(--color-text-primary)";
-  return (
-    <div className="bg-surface-paper border border-border rounded-xl p-lg shadow-elevation-2">
-      <p className="text-xs text-text-secondary uppercase tracking-wide">
-        {label}
-      </p>
-      <p
-        className="text-h3 mt-2xs font-bold inline-flex items-center gap-xs"
-        style={{ color, letterSpacing: "-0.01em" }}
-      >
-        {Icon && <Icon size={20} />}
-        {value}
-      </p>
-      {hint && <p className="text-xs text-text-secondary mt-2xs">{hint}</p>}
-    </div>
-  );
-}
 
 function ProgressMeter({ value }) {
   const pct = Math.min(1, Math.max(0, value ?? 0));

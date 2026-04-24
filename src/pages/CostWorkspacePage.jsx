@@ -26,6 +26,9 @@ import {
 import { useCollaboration } from "../context/CollaborationContext.jsx";
 import { useItemDetail } from "../context/ItemDetailContext.jsx";
 
+import { KpiCard } from "../components/KpiCard.jsx";
+import { Th } from "../components/Th.jsx";
+import { FilterBtn } from "../components/FilterBtn.jsx";
 const KRW = new Intl.NumberFormat("en-US");
 
 export function CostWorkspacePage() {
@@ -497,60 +500,6 @@ function CostRow({ row, total, selected, isExpanded, onToggle, onSelect, onDiscu
 }
 
 /* ───────────────────── Atoms ───────────────────── */
-
-function Th({ children, className = "" }) {
-  return (
-    <th
-      className={`text-left font-semibold px-md py-sm uppercase tracking-wide ${className}`}
-      style={{ letterSpacing: "0.04em" }}
-    >
-      {children}
-    </th>
-  );
-}
-
-function FilterBtn({ label, active, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`px-md py-xs rounded-md text-sm font-semibold transition-colors duration-fast ${
-        active
-          ? "bg-surface-paper text-text-primary shadow-elevation-2"
-          : "text-text-secondary hover:text-text-primary"
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
-
-function KpiCard({ label, value, tone, icon: Icon, muted, hint }) {
-  const color =
-    tone === "error"
-      ? "var(--color-error-main)"
-      : tone === "warning"
-        ? "var(--color-warning-main)"
-        : tone === "success"
-          ? "var(--color-success-main)"
-          : muted
-            ? "var(--color-text-secondary)"
-            : "var(--color-text-primary)";
-  return (
-    <div className="bg-surface-paper border border-border rounded-xl p-lg shadow-elevation-2">
-      <p className="text-xs text-text-secondary uppercase tracking-wide">
-        {label}
-      </p>
-      <p
-        className="text-h3 font-bold mt-2xs inline-flex items-center gap-xs"
-        style={{ color, letterSpacing: "-0.01em" }}
-      >
-        {Icon && <Icon size={20} />}
-        {value}
-      </p>
-      {hint && <p className="text-xs text-text-secondary mt-2xs">{hint}</p>}
-    </div>
-  );
-}
 
 function GapCell({ gap, ref_ }) {
   if (gap === 0) {
