@@ -11,8 +11,6 @@ import {
   DollarSign,
   Send,
   ShieldCheck,
-  TrendingUp,
-  TrendingDown,
   CheckCircle2,
   AlertTriangle,
   Clock,
@@ -35,7 +33,6 @@ import {
   countOverTarget,
 } from "../data/costAnalysis.js";
 import {
-  PPAP_PROGRESS,
   OPEN_RISKS,
   QBOM_SYNC_STATUS,
   MILESTONES,
@@ -81,6 +78,63 @@ export function ProjectWorkplacePage() {
   }, []);
 
   const { open: openCollab } = useCollaboration();
+
+  const decisions = useMemo(() => {
+    const items = [];
+    if (openChanges > 0) {
+      items.push({
+        icon: FilePlus,
+        tone: "info",
+        title: `${openChanges} change request${openChanges > 1 ? "s" : ""} awaiting review`,
+        detail: "Design / sourcing approvals pending.",
+        cta: "Open Design Workspace",
+        href: `/projects/${project.id}/design`,
+      });
+    }
+    activeRfx
+      .filter((r) => r.status === "comparing")
+      .slice(0, 2)
+      .forEach((r) => {
+        const best = Math.min(...r.quotes.map((q) => q.price));
+        items.push({
+          icon: Award,
+          tone: "primary",
+          title: `Award ${r.id} — ${r.title}`,
+          detail: `${r.responses}/${r.invitees} quotes received. Best ₩${KRW.format(best)}.`,
+          cta: "Compare quotes",
+          href: `/projects/${project.id}/sourcing/rfx/${r.id}`,
+        });
+      });
+    OPEN_RISKS.filter((r) => r.severity === "high")
+      .slice(0, 2)
+      .forEach((r) => {
+        items.push({
+          icon: AlertTriangle,
+          tone: "error",
+          title: r.title,
+          detail: r.action,
+          cta: "Open APQP Workspace",
+          href: `/projects/${project.id}/quality`,
+        });
+      });
+    if (upcomingMilestone) {
+      items.push({
+        icon: Clock,
+        tone: upcomingMilestone.status === "atrisk" ? "error" : "warning",
+        title: `Upcoming milestone: ${upcomingMilestone.label}`,
+        detail: `Due ${upcomingMilestone.due}. Phase ${upcomingMilestone.phase}.`,
+        cta: "Open APQP Workspace",
+        href: `/projects/${project.id}/quality`,
+      });
+    }
+    return items;
+  }, [openChanges, activeRfx, upcomingMilestone, project.id]);
+
+  const daysToSop = useMemo(() => {
+    const sop = new Date(project.sopDate);
+    const today = new Date();
+    return Math.ceil((sop - today) / (1000 * 60 * 60 * 24));
+  }, [project.sopDate]);
 
   const recentActivity = useMemo(() => buildActivityFeed(), []);
 
@@ -164,36 +218,57 @@ export function ProjectWorkplacePage() {
         </div>
       </section>
 
-      {/* KPI row */}
+      {/* KPI row — project-level snapshot (module-specific metrics live in the cards below) */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-lg mb-xl">
         <KpiCard
-          label="Cost Gap vs Target"
-          value={`${costTotals.gap >= 0 ? "+" : ""}₩${KRW.format(costTotals.gap)}`}
-          tone={
-            costTotals.gap > 0 ? "error" : costTotals.gap < 0 ? "success" : undefined
-          }
-          icon={costTotals.gap > 0 ? TrendingUp : TrendingDown}
-          hint={`${overTarget} items over · Current ₩${KRW.format(costTotals.current)}`}
-        />
-        <KpiCard
-          label="Design Readiness"
-          value={`${Math.round(project.designReadiness * 100)}%`}
+          label="Phase Progress"
+          value={`${Math.round(project.phaseProgress * 100)}%`}
           icon={CheckCircle2}
-          tone={project.designReadiness > 0.85 ? "success" : "info"}
+          hint={`${phaseMeta?.label ?? "—"} phase`}
         />
         <KpiCard
-          label="PPAP First-Pass"
-          value={`${Math.round(apqpSummary.firstPassRate * 100)}%`}
-          icon={ShieldCheck}
-          tone={apqpSummary.firstPassRate > 0.8 ? "success" : "warning"}
-          hint={`${PPAP_PROGRESS.length} items tracked`}
+          label="Days to SOP"
+          value={
+            daysToSop >= 0
+              ? `${daysToSop.toLocaleString()}`
+              : `${Math.abs(daysToSop).toLocaleString()} past`
+          }
+          icon={Clock}
+          tone={
+            daysToSop < 0
+              ? "error"
+              : daysToSop < 30
+                ? "warning"
+                : daysToSop < 90
+                  ? "info"
+                  : undefined
+          }
+          hint={`SOP ${project.sopDate}`}
         />
         <KpiCard
-          label="Open Risks"
-          value={`${apqpSummary.totalRisks}`}
-          icon={AlertTriangle}
-          tone={apqpSummary.highRisks > 0 ? "error" : "warning"}
-          hint={`${apqpSummary.highRisks} high severity`}
+          label="Team"
+          value={`${project.members.length + 1}`}
+          icon={Users}
+          hint={`Owned by ${project.owner.name}`}
+        />
+        <KpiCard
+          label="Overall Status"
+          value={riskMeta.label}
+          tone={
+            project.risk === "blocked"
+              ? "error"
+              : project.risk === "atrisk"
+                ? "warning"
+                : "success"
+          }
+          icon={
+            project.risk === "blocked"
+              ? AlertTriangle
+              : project.risk === "atrisk"
+                ? AlertTriangle
+                : CheckCircle2
+          }
+          hint={`${decisions.length} decision${decisions.length === 1 ? "" : "s"} needed`}
         />
       </div>
 
@@ -324,59 +399,26 @@ export function ProjectWorkplacePage() {
               Decisions Needed
             </h3>
             <span className="text-xs text-text-secondary">
-              {openChanges + apqpSummary.highRisks + (activeRfx.find((r) => r.status === "comparing") ? 1 : 0)}{" "}
-              items awaiting action
+              {decisions.length === 0
+                ? "All caught up"
+                : `${decisions.length} item${decisions.length === 1 ? "" : "s"} awaiting action`}
             </span>
           </div>
-          <ul className="divide-y divide-border">
-            {openChanges > 0 && (
-              <DecisionRow
-                icon={FilePlus}
-                tone="info"
-                title={`${openChanges} change request${openChanges > 1 ? "s" : ""} awaiting review`}
-                detail="Design / sourcing approvals pending."
-                cta="Open Design Workspace"
-                href={`/projects/${project.id}/design`}
+          {decisions.length === 0 ? (
+            <div className="flex items-center justify-center gap-sm py-2xl text-sm text-text-secondary">
+              <CheckCircle2
+                size={16}
+                style={{ color: "var(--color-success-main)" }}
               />
-            )}
-            {activeRfx
-              .filter((r) => r.status === "comparing")
-              .slice(0, 2)
-              .map((r) => (
-                <DecisionRow
-                  key={r.id}
-                  icon={Award}
-                  tone="primary"
-                  title={`Award ${r.id} — ${r.title}`}
-                  detail={`${r.responses}/${r.invitees} quotes received. Best ₩${KRW.format(Math.min(...r.quotes.map((q) => q.price)))}.`}
-                  cta="Compare quotes"
-                  href={`/projects/${project.id}/sourcing/rfx/${r.id}`}
-                />
+              No decisions pending — you're all caught up.
+            </div>
+          ) : (
+            <ul className="divide-y divide-border">
+              {decisions.map((d, i) => (
+                <DecisionRow key={i} {...d} />
               ))}
-            {OPEN_RISKS.filter((r) => r.severity === "high")
-              .slice(0, 2)
-              .map((r) => (
-                <DecisionRow
-                  key={r.id}
-                  icon={AlertTriangle}
-                  tone="error"
-                  title={r.title}
-                  detail={r.action}
-                  cta="Open APQP Workspace"
-                  href={`/projects/${project.id}/quality`}
-                />
-              ))}
-            {upcomingMilestone && (
-              <DecisionRow
-                icon={Clock}
-                tone={upcomingMilestone.status === "atrisk" ? "error" : "warning"}
-                title={`Upcoming milestone: ${upcomingMilestone.label}`}
-                detail={`Due ${upcomingMilestone.due}. Phase ${upcomingMilestone.phase}.`}
-                cta="Open APQP Workspace"
-                href={`/projects/${project.id}/quality`}
-              />
-            )}
-          </ul>
+            </ul>
+          )}
         </section>
 
         {/* Recent activity */}
