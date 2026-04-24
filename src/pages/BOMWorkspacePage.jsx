@@ -232,6 +232,14 @@ export function BOMWorkspacePage() {
               <GitCompare size={14} />
               vs {BOM_META.previousVersion}
             </button>
+            <Link
+              to={`/projects/${BOM_META.projectId}/bom/compare`}
+              className="inline-flex items-center gap-xs px-md py-xs rounded-md text-sm font-semibold text-text-secondary bg-surface-paper border border-border hover:bg-surface-container-secondary transition-colors duration-fast"
+              title="Open full compare view"
+            >
+              <GitCompare size={14} />
+              Full compare
+            </Link>
             <button className="inline-flex items-center gap-xs px-md py-xs rounded-md text-sm font-semibold text-text-secondary bg-surface-paper border border-border hover:bg-surface-container-secondary transition-colors duration-fast">
               <Filter size={14} />
               Filter

@@ -14,6 +14,8 @@ import { CategoryListPage } from "./pages/CategoryListPage.jsx";
 import { CategoryDetailPage } from "./pages/CategoryDetailPage.jsx";
 import { AIWorkspacePage } from "./pages/AIWorkspacePage.jsx";
 import { APQPWorkspacePage } from "./pages/APQPWorkspacePage.jsx";
+import { DesignWorkspacePage } from "./pages/DesignWorkspacePage.jsx";
+import { BOMVersionComparePage } from "./pages/BOMVersionComparePage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -38,12 +40,16 @@ export default function App() {
           element={<BOMWorkspacePage />}
         />
         <Route
+          path="/projects/:projectId/bom/compare"
+          element={<BOMVersionComparePage />}
+        />
+        <Route
           path="/projects/:projectId/changes/new"
           element={<DesignChangeRequestPage />}
         />
         <Route
           path="/projects/:projectId/design"
-          element={<Placeholder label="Design Workspace" />}
+          element={<DesignWorkspacePage />}
         />
         <Route
           path="/projects/:projectId/cost"
