@@ -6,7 +6,14 @@ import {
   Building2,
   FolderTree,
   Sparkles,
+  MessageSquare,
 } from "lucide-react";
+import {
+  CollaborationProvider,
+  useCollaboration,
+} from "../context/CollaborationContext.jsx";
+import { CollaborationDrawer } from "../components/collaboration/CollaborationDrawer.jsx";
+import { TOTAL_UNREAD } from "../data/mockCollaboration.js";
 
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -17,11 +24,45 @@ const NAV_ITEMS = [
   { to: "/ai", label: "AI Workspace", icon: Sparkles },
 ];
 
-export function AppShell() {
+function CollabTrigger() {
+  const { toggle, isOpen } = useCollaboration();
+  return (
+    <button
+      onClick={toggle}
+      aria-label="Open collaboration panel"
+      className={`relative inline-flex items-center gap-xs px-md py-xs rounded-md text-sm font-semibold transition-colors duration-fast ${
+        isOpen
+          ? "text-text-inverse"
+          : "text-text-secondary bg-surface-paper border border-border hover:bg-surface-container-secondary hover:text-text-primary"
+      }`}
+      style={
+        isOpen
+          ? {
+              backgroundColor: "var(--color-primary-main)",
+              borderColor: "var(--color-primary-main)",
+            }
+          : undefined
+      }
+    >
+      <MessageSquare size={16} />
+      <span className="hidden sm:inline">Collaborate</span>
+      {TOTAL_UNREAD > 0 && !isOpen && (
+        <span
+          className="ml-xs min-w-4 h-4 px-1 rounded-full text-[10px] font-bold text-text-inverse inline-flex items-center justify-center"
+          style={{ backgroundColor: "var(--color-error-main)" }}
+        >
+          {TOTAL_UNREAD}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function Shell() {
   return (
     <div className="min-h-screen bg-surface-default">
       {/* GNB */}
-      <header className="h-gnb-h border-b border-border bg-surface-paper flex items-center px-xl sticky top-0 z-gnb">
+      <header className="h-gnb-h border-b border-border bg-surface-paper flex items-center gap-md px-xl sticky top-0 z-gnb">
         <div className="flex items-center gap-sm">
           <div
             className="w-8 h-8 rounded-md flex items-center justify-center text-text-inverse font-bold"
@@ -31,9 +72,10 @@ export function AppShell() {
           </div>
           <span className="text-lg font-semibold">Caidentia D2S</span>
         </div>
-        <div className="ml-auto text-sm text-text-secondary">
+        <div className="ml-auto text-sm text-text-secondary hidden md:block">
           EV-Model-X · Dev Phase
         </div>
+        <CollabTrigger />
       </header>
 
       <div className="flex">
@@ -69,6 +111,16 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
+
+      <CollaborationDrawer />
     </div>
+  );
+}
+
+export function AppShell() {
+  return (
+    <CollaborationProvider>
+      <Shell />
+    </CollaborationProvider>
   );
 }

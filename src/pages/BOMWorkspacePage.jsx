@@ -10,6 +10,7 @@ import {
   AlertTriangle,
   Circle,
   Building2,
+  MessageSquare,
 } from "lucide-react";
 import { PageHeader } from "../components/PageHeader.jsx";
 import { StatusBadge } from "../components/StatusBadge.jsx";
@@ -19,6 +20,7 @@ import {
   flattenBOM,
   collectAllIds,
 } from "../data/mockBOM.js";
+import { useCollaboration } from "../context/CollaborationContext.jsx";
 
 const VIEWS = [
   { id: "ebom", label: "E-BOM", hint: "Engineering 계층 구조" },
@@ -66,6 +68,18 @@ export function BOMWorkspacePage() {
     new Set(BOM_NODES.map((n) => n.id)),
   );
   const [selectedId, setSelectedId] = useState(null);
+  const { open: openPanel } = useCollaboration();
+
+  const openDiscussion = (row) => {
+    openPanel({
+      channel: "design",
+      anchor: {
+        type: "bom-item",
+        id: row.id,
+        label: `${row.code} ${row.name}`,
+      },
+    });
+  };
 
   const rows = useMemo(() => {
     const flat = flattenBOM(BOM_NODES, expandedIds);
@@ -269,6 +283,7 @@ export function BOMWorkspacePage() {
                 <Th>Sourcing</Th>
                 <Th>PPAP</Th>
                 <Th>Risk</Th>
+                <Th className="text-right">Actions</Th>
               </tr>
             </thead>
             <tbody>
@@ -281,12 +296,13 @@ export function BOMWorkspacePage() {
                   onToggle={toggle}
                   onSelect={setSelectedId}
                   isExpanded={expandedIds.has(row.id)}
+                  onDiscuss={openDiscussion}
                 />
               ))}
               {rows.length === 0 && (
                 <tr>
                   <td
-                    colSpan={11}
+                    colSpan={12}
                     className="text-center py-2xl text-sm text-text-secondary"
                   >
                     일치하는 부품이 없습니다.
@@ -376,7 +392,7 @@ function VersionSelect({ value, onChange, versions }) {
   );
 }
 
-function BOMRow({ row, selected, compareMode, onToggle, onSelect, isExpanded }) {
+function BOMRow({ row, selected, compareMode, onToggle, onSelect, isExpanded, onDiscuss }) {
   const deltaStyle = compareMode && row.delta ? DELTA_STYLE[row.delta] : null;
   const costGap = (row.unitPrice ?? 0) - (row.targetCost ?? 0);
 
@@ -495,6 +511,19 @@ function BOMRow({ row, selected, compareMode, onToggle, onSelect, isExpanded }) 
           />
           {row.riskLevel}
         </span>
+      </td>
+      <td className="px-md py-sm text-right">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDiscuss(row);
+          }}
+          title="이 Item 토론 열기"
+          aria-label={`Discuss ${row.code}`}
+          className="inline-flex items-center justify-center w-7 h-7 rounded-sm text-text-secondary hover:bg-surface-container-tertiary hover:text-text-primary transition-colors duration-fast"
+        >
+          <MessageSquare size={14} />
+        </button>
       </td>
     </tr>
   );
