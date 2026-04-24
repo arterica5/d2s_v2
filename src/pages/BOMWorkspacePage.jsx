@@ -135,7 +135,11 @@ export function BOMWorkspacePage() {
   return (
     <>
       <PageHeader
-        breadcrumbs={["Projects", BOM_META.projectName, "BOM Workspace"]}
+        breadcrumbs={[
+          { label: "Projects", to: "/projects" },
+          { label: BOM_META.projectName, to: `/projects/${BOM_META.projectId}` },
+          { label: "BOM Workspace" },
+        ]}
         title="BOM Workspace"
         description="BOM is a view, not data — switch the lens to fit the task."
         actions={

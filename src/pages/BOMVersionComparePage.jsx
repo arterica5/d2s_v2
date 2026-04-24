@@ -189,10 +189,12 @@ export function BOMVersionComparePage() {
     <>
       <PageHeader
         breadcrumbs={[
-          "Projects",
-          BOM_META.projectName,
-          "BOM",
-          `Compare ${BOM_META.previousVersion} → ${BOM_META.currentVersion}`,
+          { label: "Projects", to: "/projects" },
+          { label: BOM_META.projectName, to: `/projects/${BOM_META.projectId}` },
+          { label: "BOM", to: `/projects/${BOM_META.projectId}/bom` },
+          {
+            label: `Compare ${BOM_META.previousVersion} → ${BOM_META.currentVersion}`,
+          },
         ]}
         title="BOM Version Compare"
         description={`Changes between ${BOM_META.previousVersion} and ${BOM_META.currentVersion} — triage what moved.`}

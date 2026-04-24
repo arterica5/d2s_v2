@@ -43,7 +43,10 @@ export function CategoryDetailPage() {
   return (
     <>
       <PageHeader
-        breadcrumbs={["Categories", category.name]}
+        breadcrumbs={[
+          { label: "Categories", to: "/categories" },
+          { label: category.name },
+        ]}
         title={category.name}
         description={category.description}
         actions={

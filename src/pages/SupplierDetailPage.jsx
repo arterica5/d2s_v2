@@ -74,7 +74,10 @@ export function SupplierDetailPage() {
   return (
     <>
       <PageHeader
-        breadcrumbs={["Suppliers", supplier.name]}
+        breadcrumbs={[
+          { label: "Suppliers", to: "/suppliers" },
+          { label: supplier.name },
+        ]}
         title={supplier.name}
         description={`${supplier.type} · ${supplier.categories.join(" · ")}`}
         actions={

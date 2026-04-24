@@ -62,7 +62,11 @@ export function APQPWorkspacePage() {
   return (
     <>
       <PageHeader
-        breadcrumbs={["Projects", BOM_META.projectName, "APQP Workspace"]}
+        breadcrumbs={[
+          { label: "Projects", to: "/projects" },
+          { label: BOM_META.projectName, to: `/projects/${BOM_META.projectId}` },
+          { label: "APQP Workspace" },
+        ]}
         title="APQP Workspace"
         description="Quality process readiness — APQP phases, PPAP progress, and Q-BOM sync."
         actions={

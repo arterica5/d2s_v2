@@ -48,7 +48,12 @@ export function RfxDetailPage() {
   return (
     <>
       <PageHeader
-        breadcrumbs={["Projects", BOM_META.projectName, "Sourcing", rfx.id]}
+        breadcrumbs={[
+          { label: "Projects", to: "/projects" },
+          { label: BOM_META.projectName, to: `/projects/${BOM_META.projectId}` },
+          { label: "Sourcing", to: `/projects/${BOM_META.projectId}/sourcing` },
+          { label: rfx.id },
+        ]}
         title={rfx.title}
         description={rfx.scope}
         actions={

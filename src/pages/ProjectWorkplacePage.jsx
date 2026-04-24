@@ -141,7 +141,10 @@ export function ProjectWorkplacePage() {
   return (
     <>
       <PageHeader
-        breadcrumbs={["Projects", project.name]}
+        breadcrumbs={[
+          { label: "Projects", to: "/projects" },
+          { label: project.name },
+        ]}
         title={project.name}
         description={project.description}
         actions={

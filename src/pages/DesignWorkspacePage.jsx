@@ -101,7 +101,11 @@ export function DesignWorkspacePage() {
   return (
     <>
       <PageHeader
-        breadcrumbs={["Projects", BOM_META.projectName, "Design Workspace"]}
+        breadcrumbs={[
+          { label: "Projects", to: "/projects" },
+          { label: BOM_META.projectName, to: `/projects/${BOM_META.projectId}` },
+          { label: "Design Workspace" },
+        ]}
         title="Design Workspace"
         description="Spec maturity, drawing revisions, and change pipeline — the freeze checklist in one place."
         actions={
