@@ -4,6 +4,7 @@ import { DashboardPage } from "./pages/DashboardPage.jsx";
 import { BOMWorkspacePage } from "./pages/BOMWorkspacePage.jsx";
 import { ProjectListPage } from "./pages/ProjectListPage.jsx";
 import { CostWorkspacePage } from "./pages/CostWorkspacePage.jsx";
+import { DesignChangeRequestPage } from "./pages/DesignChangeRequestPage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -26,6 +27,10 @@ export default function App() {
         <Route
           path="/projects/:projectId/bom"
           element={<BOMWorkspacePage />}
+        />
+        <Route
+          path="/projects/:projectId/changes/new"
+          element={<DesignChangeRequestPage />}
         />
         <Route
           path="/projects/:projectId/design"

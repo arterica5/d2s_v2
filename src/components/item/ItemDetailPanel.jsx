@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   X,
   ExternalLink,
@@ -19,6 +20,7 @@ import {
 import { useItemDetail } from "../../context/ItemDetailContext.jsx";
 import { useCollaboration } from "../../context/CollaborationContext.jsx";
 import { getItemDetail } from "../../data/itemDetails.js";
+import { BOM_META } from "../../data/mockBOM.js";
 import { StatusBadge } from "../StatusBadge.jsx";
 
 const KRW = new Intl.NumberFormat("en-US");
@@ -34,6 +36,7 @@ const TABS = [
 export function ItemDetailPanel() {
   const { activeItem, isOpen, close } = useItemDetail();
   const { open: openCollab } = useCollaboration();
+  const closeOnNav = () => close();
   const [tab, setTab] = useState("overview");
 
   useEffect(() => {
@@ -80,6 +83,7 @@ export function ItemDetailPanel() {
                     },
                   })
                 }
+                onNavigate={closeOnNav}
               />
             )}
             {tab === "cost" && <CostTab item={activeItem} detail={detail} />}
@@ -157,7 +161,7 @@ function PanelTabs({ tab, onChange }) {
 
 /* ───────────────────── Overview ───────────────────── */
 
-function OverviewTab({ item, detail, onDiscuss }) {
+function OverviewTab({ item, detail, onDiscuss, onNavigate }) {
   const costGap = (item.unitPrice ?? 0) - (item.targetCost ?? 0);
   return (
     <div className="p-lg space-y-lg">
@@ -219,12 +223,14 @@ function OverviewTab({ item, detail, onDiscuss }) {
         >
           <MessageSquare size={14} /> Discuss
         </button>
-        <button
+        <Link
+          to={`/projects/${BOM_META.projectId}/changes/new?item=${item.id}`}
+          onClick={onNavigate}
           className="inline-flex items-center gap-xs px-md py-sm rounded-md text-sm font-semibold text-text-inverse transition-colors duration-fast"
           style={{ backgroundColor: "var(--color-primary-main)" }}
         >
           <FilePlus size={14} /> Request Change
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ import {
   Building2,
   MessageSquare,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { PageHeader } from "../components/PageHeader.jsx";
 import { StatusBadge } from "../components/StatusBadge.jsx";
 import {
@@ -140,12 +141,13 @@ export function BOMWorkspacePage() {
             <button className="inline-flex items-center gap-xs px-md py-sm rounded-md text-sm font-semibold text-text-primary bg-surface-paper border border-border hover:bg-surface-container-secondary transition-colors duration-fast">
               <Download size={16} /> Export
             </button>
-            <button
+            <Link
+              to={`/projects/${BOM_META.projectId}/changes/new${selectedId ? `?item=${selectedId}` : ""}`}
               className="inline-flex items-center gap-xs px-md py-sm rounded-md text-sm font-semibold text-text-inverse transition-colors duration-fast"
               style={{ backgroundColor: "var(--color-primary-main)" }}
             >
               <FilePlus size={16} /> Request Change
-            </button>
+            </Link>
           </>
         }
       />
