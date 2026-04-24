@@ -13,6 +13,8 @@ import {
   useCollaboration,
 } from "../context/CollaborationContext.jsx";
 import { CollaborationDrawer } from "../components/collaboration/CollaborationDrawer.jsx";
+import { ItemDetailProvider } from "../context/ItemDetailContext.jsx";
+import { ItemDetailPanel } from "../components/item/ItemDetailPanel.jsx";
 import { TOTAL_UNREAD } from "../data/mockCollaboration.js";
 
 const NAV_ITEMS = [
@@ -112,6 +114,7 @@ function Shell() {
         </main>
       </div>
 
+      <ItemDetailPanel />
       <CollaborationDrawer />
     </div>
   );
@@ -119,8 +122,10 @@ function Shell() {
 
 export function AppShell() {
   return (
-    <CollaborationProvider>
-      <Shell />
-    </CollaborationProvider>
+    <ItemDetailProvider>
+      <CollaborationProvider>
+        <Shell />
+      </CollaborationProvider>
+    </ItemDetailProvider>
   );
 }

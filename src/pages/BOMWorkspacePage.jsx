@@ -21,6 +21,7 @@ import {
   collectAllIds,
 } from "../data/mockBOM.js";
 import { useCollaboration } from "../context/CollaborationContext.jsx";
+import { useItemDetail } from "../context/ItemDetailContext.jsx";
 
 const VIEWS = [
   { id: "ebom", label: "E-BOM", hint: "Engineering hierarchy" },
@@ -69,6 +70,7 @@ export function BOMWorkspacePage() {
   );
   const [selectedId, setSelectedId] = useState(null);
   const { open: openPanel } = useCollaboration();
+  const { open: openItemDetail } = useItemDetail();
 
   const openDiscussion = (row) => {
     openPanel({
@@ -79,6 +81,11 @@ export function BOMWorkspacePage() {
         label: `${row.code} ${row.name}`,
       },
     });
+  };
+
+  const showDetail = (row) => {
+    setSelectedId(row.id);
+    openItemDetail(row);
   };
 
   const rows = useMemo(() => {
@@ -295,6 +302,7 @@ export function BOMWorkspacePage() {
                   compareMode={compareMode}
                   onToggle={toggle}
                   onSelect={setSelectedId}
+                  onOpenDetail={showDetail}
                   isExpanded={expandedIds.has(row.id)}
                   onDiscuss={openDiscussion}
                 />
@@ -392,7 +400,7 @@ function VersionSelect({ value, onChange, versions }) {
   );
 }
 
-function BOMRow({ row, selected, compareMode, onToggle, onSelect, isExpanded, onDiscuss }) {
+function BOMRow({ row, selected, compareMode, onToggle, onSelect, onOpenDetail, isExpanded, onDiscuss }) {
   const deltaStyle = compareMode && row.delta ? DELTA_STYLE[row.delta] : null;
   const costGap = (row.unitPrice ?? 0) - (row.targetCost ?? 0);
 
@@ -448,9 +456,16 @@ function BOMRow({ row, selected, compareMode, onToggle, onSelect, isExpanded, on
                 </span>
               )}
             </div>
-            <div className="font-semibold text-text-primary truncate">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenDetail(row);
+              }}
+              className="font-semibold text-text-primary truncate text-left hover:underline hover:decoration-primary-main hover:underline-offset-4 transition-colors duration-fast"
+              title="Open Item 360"
+            >
               {row.name}
-            </div>
+            </button>
           </div>
         </div>
       </td>
