@@ -255,7 +255,7 @@ function ProjectRow({ project: p }) {
               </span>
             </div>
             <Link
-              to={`/projects/${p.id}/bom`}
+              to={`/projects/${p.id}`}
               className="block font-semibold text-text-primary mt-2xs hover:underline hover:decoration-primary-main hover:underline-offset-4"
             >
               {p.name}
@@ -298,7 +298,7 @@ function ProjectRow({ project: p }) {
       </td>
       <td className="px-md py-md text-right">
         <Link
-          to={`/projects/${p.id}/bom`}
+          to={`/projects/${p.id}`}
           className="inline-flex items-center justify-center w-7 h-7 rounded-sm text-text-secondary hover:bg-surface-container-tertiary hover:text-text-primary transition-colors duration-fast"
           aria-label={`Open ${p.name}`}
         >
@@ -330,7 +330,7 @@ function ProjectCard({ project: p }) {
 
   return (
     <Link
-      to={`/projects/${p.id}/bom`}
+      to={`/projects/${p.id}`}
       className="group block rounded-xl bg-surface-paper border border-border shadow-elevation-2 hover:shadow-elevation-16 transition-shadow duration-normal overflow-hidden"
     >
       <div

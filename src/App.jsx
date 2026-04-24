@@ -16,6 +16,7 @@ import { AIWorkspacePage } from "./pages/AIWorkspacePage.jsx";
 import { APQPWorkspacePage } from "./pages/APQPWorkspacePage.jsx";
 import { DesignWorkspacePage } from "./pages/DesignWorkspacePage.jsx";
 import { BOMVersionComparePage } from "./pages/BOMVersionComparePage.jsx";
+import { ProjectWorkplacePage } from "./pages/ProjectWorkplacePage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -35,6 +36,10 @@ export default function App() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/projects" element={<ProjectListPage />} />
+        <Route
+          path="/projects/:projectId"
+          element={<ProjectWorkplacePage />}
+        />
         <Route
           path="/projects/:projectId/bom"
           element={<BOMWorkspacePage />}
