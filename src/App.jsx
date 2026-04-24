@@ -13,6 +13,7 @@ import { ItemListPage } from "./pages/ItemListPage.jsx";
 import { CategoryListPage } from "./pages/CategoryListPage.jsx";
 import { CategoryDetailPage } from "./pages/CategoryDetailPage.jsx";
 import { AIWorkspacePage } from "./pages/AIWorkspacePage.jsx";
+import { APQPWorkspacePage } from "./pages/APQPWorkspacePage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -58,7 +59,7 @@ export default function App() {
         />
         <Route
           path="/projects/:projectId/quality"
-          element={<Placeholder label="APQP Workspace" />}
+          element={<APQPWorkspacePage />}
         />
         <Route path="/items" element={<ItemListPage />} />
         <Route path="/suppliers" element={<SupplierListPage />} />
