@@ -9,6 +9,10 @@ import { SourcingWorkspacePage } from "./pages/SourcingWorkspacePage.jsx";
 import { RfxDetailPage } from "./pages/RfxDetailPage.jsx";
 import { SupplierListPage } from "./pages/SupplierListPage.jsx";
 import { SupplierDetailPage } from "./pages/SupplierDetailPage.jsx";
+import { ItemListPage } from "./pages/ItemListPage.jsx";
+import { CategoryListPage } from "./pages/CategoryListPage.jsx";
+import { CategoryDetailPage } from "./pages/CategoryDetailPage.jsx";
+import { AIWorkspacePage } from "./pages/AIWorkspacePage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -56,17 +60,15 @@ export default function App() {
           path="/projects/:projectId/quality"
           element={<Placeholder label="APQP Workspace" />}
         />
-        <Route path="/items" element={<Placeholder label="Items" />} />
+        <Route path="/items" element={<ItemListPage />} />
         <Route path="/suppliers" element={<SupplierListPage />} />
         <Route
           path="/suppliers/:supplierId"
           element={<SupplierDetailPage />}
         />
-        <Route
-          path="/categories"
-          element={<Placeholder label="Categories" />}
-        />
-        <Route path="/ai" element={<Placeholder label="AI Workspace" />} />
+        <Route path="/categories" element={<CategoryListPage />} />
+        <Route path="/categories/:slug" element={<CategoryDetailPage />} />
+        <Route path="/ai" element={<AIWorkspacePage />} />
         <Route path="*" element={<Placeholder label="Not Found" />} />
       </Route>
     </Routes>
