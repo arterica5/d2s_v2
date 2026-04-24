@@ -1,0 +1,293 @@
+/**
+ * Caidentia D2S — Design Tokens
+ * Source: docs/06_design-system.md (Caidentia 2.0, MUI v6 based)
+ * Scope: Light Mode only (Enterprise B2B SRM platform)
+ *
+ * Usage:
+ *   1. Import this file at the app root: `import "./styles/tokens.css"`
+ *   2. Reference via CSS variables: `color: var(--color-text-primary)`
+ *   3. Or via Tailwind arbitrary values: `text-[var(--color-text-primary)]`
+ *   4. Tailwind semantic classes are wired in `tailwind.config.js`.
+ */
+
+/* ---------- Font loading (Roboto) ---------- */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap");
+
+:root {
+  /* ============================================================
+   * COLOR — Primary (Brand)
+   * ============================================================ */
+  --color-primary-main: #532df6;
+  --color-primary-dark: #3d1fd4;
+  --color-primary-light: #ede9fe;
+  --color-primary-contrast: #ffffff;
+  --color-primary-hover: rgba(83, 45, 246, 0.04);
+  --color-primary-selected: rgba(83, 45, 246, 0.08);
+  --color-primary-focus: rgba(83, 45, 246, 0.12);
+  --color-primary-outlined-border: rgba(83, 45, 246, 0.5);
+
+  /* ============================================================
+   * COLOR — Secondary (Slate)
+   * ============================================================ */
+  --color-secondary-main: #4b5565;
+  --color-secondary-dark: #333c48;
+  --color-secondary-light: #e9eaec;
+
+  /* ============================================================
+   * COLOR — Semantic
+   * ============================================================ */
+  --color-error-main: #d32f2f;
+  --color-error-dark: #b71c1c;
+  --color-error-light: #ffab9f;
+
+  --color-warning-main: #e06900;
+  --color-warning-dark: #b34500;
+  --color-warning-light: #ffc84a;
+
+  --color-info-main: #1565e0;
+  --color-info-dark: #1246cc;
+  --color-info-light: #82caff;
+
+  --color-success-main: #009955;
+  --color-success-dark: #006b3c;
+  --color-success-light: #6deaa6;
+
+  /* ============================================================
+   * COLOR — Text
+   * ============================================================ */
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #6b7280;
+  --color-text-disabled: #9ca3af;
+  --color-text-inverse: #ffffff;
+  --color-text-link: var(--color-primary-main);
+
+  /* ============================================================
+   * COLOR — Background / Surface
+   * ============================================================ */
+  --color-bg-default: #f5f5f5;
+  --color-bg-paper: #ffffff;
+  --color-bg-container-secondary: #fafafa;
+  --color-bg-container-tertiary: #f0f0f0;
+  --color-bg-surface-underlay: #ececec;
+  --color-bg-overlay: rgba(26, 26, 26, 0.7);
+
+  /* ============================================================
+   * COLOR — Border / Divider
+   * ============================================================ */
+  --color-border-primary: #e0e0e0;
+  --color-border-secondary: #ececec;
+  --color-border-focus: var(--color-primary-main);
+
+  /* ============================================================
+   * COLOR — Action (Interaction overlays)
+   * ============================================================ */
+  --color-action-active: rgba(26, 26, 26, 0.56);
+  --color-action-hover: rgba(26, 26, 26, 0.04);
+  --color-action-selected: rgba(26, 26, 26, 0.08);
+  --color-action-disabled: rgba(26, 26, 26, 0.26);
+  --color-action-disabled-bg: rgba(26, 26, 26, 0.12);
+  --color-action-focus: rgba(26, 26, 26, 0.12);
+
+  /* ============================================================
+   * COLOR — SRM Status (Badges / Chips)
+   * D2S-specific workflow states.
+   * ============================================================ */
+  --color-status-inprogress-bg: #dbeafe;   /* blue-100  */
+  --color-status-inprogress-fg: #1d4ed8;   /* blue-700  */
+  --color-status-completed-bg: #dcfce7;    /* green-100 */
+  --color-status-completed-fg: #15803d;    /* green-700 */
+  --color-status-blocked-bg: #fee2e2;      /* red-100   */
+  --color-status-blocked-fg: #b91c1c;      /* red-700   */
+  --color-status-pending-bg: #fef3c7;      /* amber-100 */
+  --color-status-pending-fg: #b45309;      /* amber-700 */
+  --color-status-notstarted-bg: #f3f4f6;   /* gray-100  */
+  --color-status-notstarted-fg: #4b5563;   /* gray-600  */
+  --color-status-review-bg: #f3e8ff;       /* purple-100*/
+  --color-status-review-fg: #7e22ce;       /* purple-700*/
+  --color-status-approved-bg: #d1fae5;     /* emerald-100*/
+  --color-status-approved-fg: #047857;     /* emerald-700*/
+  --color-status-rejected-bg: #fee2e2;     /* red-100   */
+  --color-status-rejected-fg: #dc2626;     /* red-600   */
+
+  /* ============================================================
+   * TYPOGRAPHY — Font Families
+   * ============================================================ */
+  --font-family-base: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --font-family-mono: "Roboto Mono", "JetBrains Mono", Menlo, Consolas,
+    monospace;
+
+  /* ============================================================
+   * TYPOGRAPHY — Font Weights
+   * ============================================================ */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ============================================================
+   * TYPOGRAPHY — Font Sizes (Caidentia 2.0 scale)
+   * ============================================================ */
+  --font-size-display-1: 80px;
+  --font-size-display-2: 64px;
+  --font-size-display-3: 48px;
+  --font-size-h1: 38px;
+  --font-size-h2: 32px;
+  --font-size-h3: 24px;
+  --font-size-h4: 20px;
+  --font-size-h5: 16px;
+  --font-size-2xl: 20px;
+  --font-size-xl: 18px;
+  --font-size-lg: 16px;
+  --font-size-md: 14px;
+  --font-size-sm: 12px;
+  --font-size-xs: 10px;
+
+  /* ============================================================
+   * TYPOGRAPHY — Line Heights
+   * ============================================================ */
+  --line-height-tight: 1.2;     /* Display, H1, H2 */
+  --line-height-snug: 1.3;      /* H3, H4          */
+  --line-height-normal: 1.4;    /* H5, caption     */
+  --line-height-relaxed: 1.5;   /* Body            */
+
+  /* ============================================================
+   * TYPOGRAPHY — Letter Spacing
+   * ============================================================ */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.08em;
+
+  /* ============================================================
+   * SPACING (Caidentia scale, 4px base)
+   * ============================================================ */
+  --space-none: 0px;
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 40px;
+  --space-4xl: 48px;
+  --space-5xl: 64px;
+  --space-6xl: 80px;
+  --space-7xl: 96px;
+
+  /* ============================================================
+   * BORDER RADIUS
+   * ============================================================ */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 1000px;
+
+  /* ============================================================
+   * BORDER WIDTH
+   * ============================================================ */
+  --border-width-none: 0px;
+  --border-width-sm: 0.5px;
+  --border-width-md: 1px;
+  --border-width-lg: 2px;
+  --border-width-xl: 4px;
+
+  /* ============================================================
+   * OPACITY
+   * ============================================================ */
+  --opacity-dimmed: 0.3;
+  --opacity-disabled: 0.5;
+  --opacity-overlay: 0.7;
+  --opacity-full: 1;
+
+  /* ============================================================
+   * ICON SIZE
+   * ============================================================ */
+  --icon-xs: 12px;
+  --icon-sm: 16px;
+  --icon-sm-md: 20px;
+  --icon-md: 24px;
+  --icon-lg: 32px;
+  --icon-xl: 40px;
+
+  /* ============================================================
+   * ELEVATION (MUI-aligned)
+   * Light mode: softer, cool-grey shadows.
+   * ============================================================ */
+  --shadow-0: none;
+  --shadow-2: 0 1px 2px 0 rgba(26, 26, 26, 0.06),
+              0 1px 3px 0 rgba(26, 26, 26, 0.08);
+  --shadow-16: 0 8px 16px -4px rgba(26, 26, 26, 0.12),
+               0 4px 8px -2px rgba(26, 26, 26, 0.08);
+  --shadow-24: 0 16px 32px -8px rgba(26, 26, 26, 0.16),
+               0 8px 16px -4px rgba(26, 26, 26, 0.1);
+  --shadow-focus: 0 0 0 3px var(--color-primary-focus);
+
+  /* ============================================================
+   * LAYOUT TOKENS
+   * ============================================================ */
+  --layout-gnb-height: 64px;
+  --layout-lnb-width: 240px;
+  --layout-lnb-width-collapsed: 64px;
+  --layout-page-padding: 24px;
+  --layout-card-gap: 16px;
+  --layout-section-gap: 24px;
+  --layout-collab-drawer-width: 380px;
+
+  /* ============================================================
+   * MOTION
+   * ============================================================ */
+  --duration-instant: 50ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --duration-slower: 600ms;
+
+  --easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ============================================================
+   * Z-INDEX (MUI-aligned)
+   * ============================================================ */
+  --z-gnb: 1100;
+  --z-drawer: 1200;
+  --z-modal: 1300;
+  --z-snackbar: 1400;
+  --z-tooltip: 1500;
+  --z-command-palette: 1600;
+}
+
+/* ============================================================
+ * Reduced motion — respect user preference
+ * ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+    --duration-slower: 0ms;
+  }
+}
+
+/* ============================================================
+ * Base document defaults
+ * ============================================================ */
+html {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
