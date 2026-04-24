@@ -113,7 +113,7 @@ export function CollaborationDrawer() {
               style={{ backgroundColor: "var(--color-primary-light)" }}
             >
               <Link2 size={14} style={{ color: "var(--color-primary-main)" }} />
-              <span className="text-text-secondary">현재 연결된 항목:</span>
+              <span className="text-text-secondary">Linked item:</span>
               <span
                 className="font-semibold"
                 style={{ color: "var(--color-primary-dark)" }}
@@ -187,7 +187,7 @@ function EmptyChannel({ name }) {
       <p className="text-md font-semibold text-text-primary mb-2xs">
         #{name}
       </p>
-      <p className="text-sm">아직 메시지가 없습니다. 첫 메시지를 남겨보세요.</p>
+      <p className="text-sm">No messages yet. Start the conversation.</p>
     </div>
   );
 }
@@ -265,7 +265,7 @@ function Composer({ channel, anchor }) {
       <div className="border border-border rounded-lg bg-surface-paper focus-within:border-border-focus focus-within:shadow-focus transition-shadow duration-fast">
         <textarea
           rows={2}
-          placeholder={`#${channel.name}에 메시지 보내기${anchor ? ` (${anchor.label} 연결됨)` : ""}`}
+          placeholder={`Message #${channel.name}${anchor ? ` · linked to ${anchor.label}` : ""}`}
           className="w-full px-md py-sm bg-transparent text-sm resize-none focus:outline-none placeholder:text-text-disabled"
         />
         <div className="flex items-center justify-between px-sm py-xs border-t border-border bg-surface-container-secondary rounded-b-lg">
@@ -280,7 +280,7 @@ function Composer({ channel, anchor }) {
             className="inline-flex items-center gap-xs px-md py-xs rounded-md text-xs font-semibold text-text-inverse transition-colors duration-fast"
             style={{ backgroundColor: "var(--color-primary-main)" }}
           >
-            <Send size={12} /> 보내기
+            <Send size={12} /> Send
           </button>
         </div>
       </div>

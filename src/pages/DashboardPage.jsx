@@ -14,35 +14,35 @@ const MODULES = [
   {
     to: "/projects/ev-model-x/bom",
     name: "BOM Workspace",
-    desc: "BOM 트리 + View 전환 (E-BOM / Sourcing / Q-BOM)",
+    desc: "BOM tree with E-BOM / Sourcing / Q-BOM view switching",
     icon: GitBranch,
     status: "inprogress",
   },
   {
     to: "/projects/ev-model-x/design",
     name: "Design",
-    desc: "설계 협업 — 스펙, 유사 부품, Feasibility",
+    desc: "Design collaboration — specs, similar parts, feasibility",
     icon: Package,
     status: "pending",
   },
   {
     to: "/projects/ev-model-x/cost",
     name: "Cost",
-    desc: "Should Cost · 견적 비교 · Cost Delta",
+    desc: "Should Cost, quote comparison, cost delta",
     icon: DollarSign,
     status: "notstarted",
   },
   {
     to: "/projects/ev-model-x/quality",
     name: "Quality",
-    desc: "APQP · PPAP · Q-BOM Sync",
+    desc: "APQP, PPAP, Q-BOM sync",
     icon: ShieldCheck,
     status: "notstarted",
   },
   {
     to: "/ai",
     name: "AI Workspace",
-    desc: "자연어 지시 · 문서 생성 · 워크플로우",
+    desc: "Natural-language commands, document generation, workflows",
     icon: Sparkles,
     status: "review",
   },
@@ -53,8 +53,8 @@ export function DashboardPage() {
     <>
       <PageHeader
         breadcrumbs={["Dashboard"]}
-        title="오늘의 작업"
-        description="BOM 중심 협업의 진입점입니다. 모듈을 선택해 시작하세요."
+        title="Today's Work"
+        description="Entry point for BOM-centric collaboration. Pick a module to start."
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">

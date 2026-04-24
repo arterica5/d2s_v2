@@ -8,7 +8,7 @@ function Placeholder({ label }) {
     <div className="flex items-center justify-center min-h-[60vh] text-text-secondary">
       <div className="text-center">
         <p className="text-h4 mb-sm">{label}</p>
-        <p className="text-sm">곧 구현될 화면입니다.</p>
+        <p className="text-sm">Coming soon.</p>
       </div>
     </div>
   );

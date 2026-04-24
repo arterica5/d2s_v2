@@ -23,10 +23,10 @@ import {
 import { useCollaboration } from "../context/CollaborationContext.jsx";
 
 const VIEWS = [
-  { id: "ebom", label: "E-BOM", hint: "Engineering 계층 구조" },
-  { id: "sourcing", label: "Sourcing BOM", hint: "End Item 기준 Flatten" },
+  { id: "ebom", label: "E-BOM", hint: "Engineering hierarchy" },
+  { id: "sourcing", label: "Sourcing BOM", hint: "Flattened by end item" },
   { id: "qbom", label: "Q-BOM", hint: "Item × Supplier PPAP" },
-  { id: "partlist", label: "Part List", hint: "초기 파트 리스트" },
+  { id: "partlist", label: "Part List", hint: "Initial part list" },
 ];
 
 const RISK_COLOR = {
@@ -39,19 +39,19 @@ const DELTA_STYLE = {
   added: {
     bg: "rgba(0, 153, 85, 0.08)",
     border: "var(--color-success-main)",
-    label: "+ 추가",
+    label: "+ Added",
     labelColor: "var(--color-success-dark)",
   },
   removed: {
     bg: "rgba(211, 47, 47, 0.06)",
     border: "var(--color-error-main)",
-    label: "− 삭제",
+    label: "− Removed",
     labelColor: "var(--color-error-dark)",
   },
   modified: {
     bg: "rgba(224, 105, 0, 0.08)",
     border: "var(--color-warning-main)",
-    label: "~ 변경",
+    label: "~ Modified",
     labelColor: "var(--color-warning-dark)",
   },
 };
@@ -127,7 +127,7 @@ export function BOMWorkspacePage() {
       <PageHeader
         breadcrumbs={["Projects", BOM_META.projectName, "BOM Workspace"]}
         title="BOM Workspace"
-        description="BOM은 데이터가 아니라 View — 목적에 맞게 전환해서 보세요."
+        description="BOM is a view, not data — switch the lens to fit the task."
         actions={
           <>
             <button className="inline-flex items-center gap-xs px-md py-sm rounded-md text-sm font-semibold text-text-primary bg-surface-paper border border-border hover:bg-surface-container-secondary transition-colors duration-fast">
@@ -160,8 +160,8 @@ export function BOMWorkspacePage() {
           tone={totals.gap > 0 ? "error" : "success"}
           hint={
             totals.gap > 0
-              ? "Target 초과 — Cost 검토 필요"
-              : "Target 이하 유지"
+              ? "Over target — cost review needed"
+              : "Under target"
           }
         />
       </div>
@@ -195,7 +195,7 @@ export function BOMWorkspacePage() {
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="코드, 부품명, 공급사 검색"
+                placeholder="Search code, part, or supplier"
                 className="pl-xl pr-md py-xs rounded-md text-sm border border-border bg-surface-paper w-64 focus:outline-none focus:border-border-focus focus:shadow-focus transition-shadow duration-fast"
               />
             </div>
@@ -246,7 +246,7 @@ export function BOMWorkspacePage() {
                 style={{ color: "var(--color-warning-dark)" }}
               >
                 <AlertTriangle size={12} />
-                변경사항 하이라이트 중
+                Highlighting changes
               </span>
             )}
           </div>
@@ -255,14 +255,14 @@ export function BOMWorkspacePage() {
               onClick={expandAll}
               className="hover:text-text-primary transition-colors duration-fast"
             >
-              모두 펼치기
+              Expand all
             </button>
             <span className="opacity-30">|</span>
             <button
               onClick={collapseAll}
               className="hover:text-text-primary transition-colors duration-fast"
             >
-              모두 접기
+              Collapse all
             </button>
           </div>
         </div>
@@ -305,7 +305,7 @@ export function BOMWorkspacePage() {
                     colSpan={12}
                     className="text-center py-2xl text-sm text-text-secondary"
                   >
-                    일치하는 부품이 없습니다.
+                    No matching parts.
                   </td>
                 </tr>
               )}
@@ -315,7 +315,7 @@ export function BOMWorkspacePage() {
 
         {/* Legend */}
         <div className="flex flex-wrap items-center gap-lg px-md py-sm text-xs text-text-secondary border-t border-border bg-surface-container-secondary">
-          <span className="font-semibold">범례:</span>
+          <span className="font-semibold">Legend:</span>
           {Object.entries(DELTA_STYLE).map(([key, s]) => (
             <span key={key} className="inline-flex items-center gap-xs">
               <span
@@ -331,7 +331,7 @@ export function BOMWorkspacePage() {
             </span>
           ))}
           <span className="ml-auto">
-            표시 행: <b className="text-text-primary">{rows.length}</b>
+            Rows: <b className="text-text-primary">{rows.length}</b>
           </span>
         </div>
       </div>
@@ -518,7 +518,7 @@ function BOMRow({ row, selected, compareMode, onToggle, onSelect, isExpanded, on
             e.stopPropagation();
             onDiscuss(row);
           }}
-          title="이 Item 토론 열기"
+          title="Open discussion for this item"
           aria-label={`Discuss ${row.code}`}
           className="inline-flex items-center justify-center w-7 h-7 rounded-sm text-text-secondary hover:bg-surface-container-tertiary hover:text-text-primary transition-colors duration-fast"
         >

@@ -1,12 +1,12 @@
 const STATUS_META = {
-  inprogress: { label: "진행중" },
-  completed: { label: "완료" },
-  blocked: { label: "차단" },
-  pending: { label: "대기" },
-  notstarted: { label: "미시작" },
-  review: { label: "검토중" },
-  approved: { label: "승인됨" },
-  rejected: { label: "반려" },
+  inprogress: { label: "In Progress" },
+  completed: { label: "Completed" },
+  blocked: { label: "Blocked" },
+  pending: { label: "Pending" },
+  notstarted: { label: "Not Started" },
+  review: { label: "Under Review" },
+  approved: { label: "Approved" },
+  rejected: { label: "Rejected" },
 };
 
 export function StatusBadge({ status, label }) {
