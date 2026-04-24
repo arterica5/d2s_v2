@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./layouts/AppShell.jsx";
 import { DashboardPage } from "./pages/DashboardPage.jsx";
 import { BOMWorkspacePage } from "./pages/BOMWorkspacePage.jsx";
+import { ProjectListPage } from "./pages/ProjectListPage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -20,7 +21,7 @@ export default function App() {
       <Route element={<AppShell />}>
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/projects" element={<Placeholder label="Projects" />} />
+        <Route path="/projects" element={<ProjectListPage />} />
         <Route
           path="/projects/:projectId/bom"
           element={<BOMWorkspacePage />}
