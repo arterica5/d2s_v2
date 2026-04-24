@@ -5,6 +5,8 @@ import { BOMWorkspacePage } from "./pages/BOMWorkspacePage.jsx";
 import { ProjectListPage } from "./pages/ProjectListPage.jsx";
 import { CostWorkspacePage } from "./pages/CostWorkspacePage.jsx";
 import { DesignChangeRequestPage } from "./pages/DesignChangeRequestPage.jsx";
+import { SourcingWorkspacePage } from "./pages/SourcingWorkspacePage.jsx";
+import { RfxDetailPage } from "./pages/RfxDetailPage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -42,7 +44,11 @@ export default function App() {
         />
         <Route
           path="/projects/:projectId/sourcing"
-          element={<Placeholder label="Sourcing Workspace" />}
+          element={<SourcingWorkspacePage />}
+        />
+        <Route
+          path="/projects/:projectId/sourcing/rfx/:rfxId"
+          element={<RfxDetailPage />}
         />
         <Route
           path="/projects/:projectId/quality"
