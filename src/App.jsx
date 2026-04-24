@@ -3,6 +3,7 @@ import { AppShell } from "./layouts/AppShell.jsx";
 import { DashboardPage } from "./pages/DashboardPage.jsx";
 import { BOMWorkspacePage } from "./pages/BOMWorkspacePage.jsx";
 import { ProjectListPage } from "./pages/ProjectListPage.jsx";
+import { CostWorkspacePage } from "./pages/CostWorkspacePage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -32,7 +33,7 @@ export default function App() {
         />
         <Route
           path="/projects/:projectId/cost"
-          element={<Placeholder label="Cost Workspace" />}
+          element={<CostWorkspacePage />}
         />
         <Route
           path="/projects/:projectId/sourcing"
