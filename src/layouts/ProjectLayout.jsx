@@ -12,6 +12,10 @@ import {
   PHASES,
   RISK_LEVELS,
 } from "../data/mockProjects.js";
+import { countOverTarget } from "../data/costAnalysis.js";
+import { OPEN_RISKS, QBOM_SYNC_STATUS } from "../data/mockAPQP.js";
+import { PAST_CHANGES } from "../data/mockChangeRequests.js";
+import { RFX_LIST } from "../data/mockSourcing.js";
 import { useCollaboration } from "../context/CollaborationContext.jsx";
 
 /**
@@ -21,6 +25,9 @@ import { useCollaboration } from "../context/CollaborationContext.jsx";
  * once and exposes a tab bar for the modules. Child routes plug into
  * the <Outlet /> so the project header stays sticky as the user moves
  * between BOM / Design / Cost / Sourcing / Quality / etc.
+ *
+ * Each tab can carry an attention indicator (red / amber / blue dot)
+ * so users see which modules need action before clicking in.
  */
 const PROJECT_TABS = [
   { id: "overview", to: ".", end: true, label: "Overview" },
@@ -33,6 +40,53 @@ const PROJECT_TABS = [
   { id: "members", to: "members", end: false, label: "Members" },
   { id: "activity", to: "activity", end: false, label: "Activity" },
 ];
+
+const ATTENTION_TONES = {
+  error: "var(--color-error-main)",
+  warning: "var(--color-warning-main)",
+  info: "var(--color-info-main)",
+};
+
+function buildTabAttention() {
+  // Cost — items over target → warning amber dot
+  const overCount = countOverTarget();
+  const cost =
+    overCount > 0
+      ? { tone: "warning", label: `${overCount} over target` }
+      : null;
+
+  // Quality — high-severity risks or Q-BOM gaps → red
+  const highRisks = OPEN_RISKS.filter((r) => r.severity === "high").length;
+  const qbomGaps =
+    QBOM_SYNC_STATUS.outOfSync + QBOM_SYNC_STATUS.missing;
+  const quality =
+    highRisks > 0
+      ? { tone: "error", label: `${highRisks} high-severity` }
+      : qbomGaps > 0
+        ? { tone: "warning", label: `${qbomGaps} Q-BOM gaps` }
+        : null;
+
+  // Design — change requests under review → blue
+  const openChanges = PAST_CHANGES.filter(
+    (c) => c.status === "review",
+  ).length;
+  const design =
+    openChanges > 0
+      ? { tone: "info", label: `${openChanges} change(s) in review` }
+      : null;
+
+  // Sourcing — comparing or pending responses → blue
+  const comparing = RFX_LIST.filter((r) => r.status === "comparing").length;
+  const pending = RFX_LIST.filter((r) => r.status === "sent").length;
+  const sourcing =
+    comparing > 0
+      ? { tone: "info", label: `${comparing} ready to award` }
+      : pending > 0
+        ? { tone: "warning", label: `${pending} awaiting response` }
+        : null;
+
+  return { cost, quality, design, sourcing };
+}
 
 export function ProjectLayout() {
   const { projectId } = useParams();
@@ -50,6 +104,8 @@ export function ProjectLayout() {
       (new Date(project.sopDate) - new Date()) / (1000 * 60 * 60 * 24),
     );
   }, [project.sopDate]);
+
+  const tabAttention = useMemo(() => buildTabAttention(), []);
 
   return (
     <>
@@ -168,27 +224,38 @@ export function ProjectLayout() {
           aria-label="Project sections"
           className="flex border-t border-border overflow-x-auto bg-surface-container-secondary"
         >
-          {PROJECT_TABS.map((t) => (
-            <NavLink
-              key={t.id}
-              to={t.to}
-              end={t.end}
-              className={({ isActive }) =>
-                `relative px-lg py-sm text-sm font-semibold whitespace-nowrap transition-colors duration-fast ${
+          {PROJECT_TABS.map((t) => {
+            const flag = tabAttention[t.id];
+            return (
+              <NavLink
+                key={t.id}
+                to={t.to}
+                end={t.end}
+                title={flag?.label}
+                className={({ isActive }) =>
+                  `relative px-lg py-sm text-sm font-semibold whitespace-nowrap transition-colors duration-fast inline-flex items-center gap-xs ${
+                    isActive
+                      ? "text-primary-main bg-surface-paper"
+                      : "text-text-secondary hover:text-text-primary hover:bg-surface-paper"
+                  }`
+                }
+                style={({ isActive }) =>
                   isActive
-                    ? "text-primary-main bg-surface-paper"
-                    : "text-text-secondary hover:text-text-primary hover:bg-surface-paper"
-                }`
-              }
-              style={({ isActive }) =>
-                isActive
-                  ? { boxShadow: "inset 0 -2px 0 var(--color-primary-main)" }
-                  : undefined
-              }
-            >
-              {t.label}
-            </NavLink>
-          ))}
+                    ? { boxShadow: "inset 0 -2px 0 var(--color-primary-main)" }
+                    : undefined
+                }
+              >
+                {t.label}
+                {flag && (
+                  <span
+                    aria-hidden
+                    className="inline-block w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: ATTENTION_TONES[flag.tone] }}
+                  />
+                )}
+              </NavLink>
+            );
+          })}
         </nav>
       </section>
 
