@@ -90,8 +90,6 @@ export function DesignChangeRequestPage() {
     <>
       <PageHeader
         breadcrumbs={[
-          { label: "Projects", to: "/projects" },
-          { label: BOM_META.projectName, to: `/projects/${BOM_META.projectId}` },
           { label: "BOM", to: `/projects/${BOM_META.projectId}/bom` },
           { label: "Request Change" },
         ]}

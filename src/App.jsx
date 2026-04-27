@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./layouts/AppShell.jsx";
+import { ProjectLayout } from "./layouts/ProjectLayout.jsx";
 import { DashboardPage } from "./pages/DashboardPage.jsx";
 import { BOMWorkspacePage } from "./pages/BOMWorkspacePage.jsx";
 import { ProjectListPage } from "./pages/ProjectListPage.jsx";
@@ -16,7 +17,10 @@ import { AIWorkspacePage } from "./pages/AIWorkspacePage.jsx";
 import { APQPWorkspacePage } from "./pages/APQPWorkspacePage.jsx";
 import { DesignWorkspacePage } from "./pages/DesignWorkspacePage.jsx";
 import { BOMVersionComparePage } from "./pages/BOMVersionComparePage.jsx";
-import { ProjectWorkplacePage } from "./pages/ProjectWorkplacePage.jsx";
+import { ProjectOverviewPage } from "./pages/ProjectOverviewPage.jsx";
+import { ProjectFilesPage } from "./pages/ProjectFilesPage.jsx";
+import { ProjectMembersPage } from "./pages/ProjectMembersPage.jsx";
+import { ProjectActivityPage } from "./pages/ProjectActivityPage.jsx";
 
 function Placeholder({ label }) {
   return (
@@ -36,42 +40,26 @@ export default function App() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/projects" element={<ProjectListPage />} />
-        <Route
-          path="/projects/:projectId"
-          element={<ProjectWorkplacePage />}
-        />
-        <Route
-          path="/projects/:projectId/bom"
-          element={<BOMWorkspacePage />}
-        />
-        <Route
-          path="/projects/:projectId/bom/compare"
-          element={<BOMVersionComparePage />}
-        />
-        <Route
-          path="/projects/:projectId/changes/new"
-          element={<DesignChangeRequestPage />}
-        />
-        <Route
-          path="/projects/:projectId/design"
-          element={<DesignWorkspacePage />}
-        />
-        <Route
-          path="/projects/:projectId/cost"
-          element={<CostWorkspacePage />}
-        />
-        <Route
-          path="/projects/:projectId/sourcing"
-          element={<SourcingWorkspacePage />}
-        />
-        <Route
-          path="/projects/:projectId/sourcing/rfx/:rfxId"
-          element={<RfxDetailPage />}
-        />
-        <Route
-          path="/projects/:projectId/quality"
-          element={<APQPWorkspacePage />}
-        />
+
+        {/* Project workspace — shared layout with tab navigation */}
+        <Route path="/projects/:projectId" element={<ProjectLayout />}>
+          <Route index element={<ProjectOverviewPage />} />
+          <Route path="bom" element={<BOMWorkspacePage />} />
+          <Route path="bom/compare" element={<BOMVersionComparePage />} />
+          <Route path="design" element={<DesignWorkspacePage />} />
+          <Route path="cost" element={<CostWorkspacePage />} />
+          <Route path="sourcing" element={<SourcingWorkspacePage />} />
+          <Route
+            path="sourcing/rfx/:rfxId"
+            element={<RfxDetailPage />}
+          />
+          <Route path="quality" element={<APQPWorkspacePage />} />
+          <Route path="changes/new" element={<DesignChangeRequestPage />} />
+          <Route path="files" element={<ProjectFilesPage />} />
+          <Route path="members" element={<ProjectMembersPage />} />
+          <Route path="activity" element={<ProjectActivityPage />} />
+        </Route>
+
         <Route path="/items" element={<ItemListPage />} />
         <Route path="/suppliers" element={<SupplierListPage />} />
         <Route

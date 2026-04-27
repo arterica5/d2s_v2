@@ -54,11 +54,6 @@ export function SourcingWorkspacePage() {
   return (
     <>
       <PageHeader
-        breadcrumbs={[
-          { label: "Projects", to: "/projects" },
-          { label: BOM_META.projectName, to: `/projects/${BOM_META.projectId}` },
-          { label: "Sourcing" },
-        ]}
         title="Sourcing Workspace"
         description="RFx pipeline — track invitations, quotes, and awards across categories."
         actions={

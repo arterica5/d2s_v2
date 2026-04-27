@@ -85,11 +85,6 @@ export function CostWorkspacePage() {
   return (
     <>
       <PageHeader
-        breadcrumbs={[
-          { label: "Projects", to: "/projects" },
-          { label: BOM_META.projectName, to: `/projects/${BOM_META.projectId}` },
-          { label: "Cost Workspace" },
-        ]}
         title="Cost Workspace"
         description="Track Target vs Current vs Should Cost — drive negotiation before design freeze."
         actions={
