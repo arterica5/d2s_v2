@@ -11,6 +11,11 @@ import {
   FilePlus,
   Send,
   Users,
+  DollarSign,
+  Package,
+  ShieldCheck,
+  TrendingUp,
+  TrendingDown,
 } from "lucide-react";
 import { KpiCard } from "../components/KpiCard.jsx";
 import {
@@ -21,14 +26,18 @@ import {
 import {
   computeTopLevelTotals,
   countOverTarget,
+  flattenAll,
 } from "../data/costAnalysis.js";
 import {
   OPEN_RISKS,
   MILESTONES,
+  PPAP_PROGRESS,
+  QBOM_SYNC_STATUS,
   summarizeAPQP,
 } from "../data/mockAPQP.js";
 import { PAST_CHANGES } from "../data/mockChangeRequests.js";
-import { RFX_LIST } from "../data/mockSourcing.js";
+import { RFX_LIST, summarizeRfx } from "../data/mockSourcing.js";
+import { BOM_META } from "../data/mockBOM.js";
 
 const KRW = new Intl.NumberFormat("en-US");
 
@@ -49,11 +58,23 @@ export function ProjectOverviewPage() {
 
   const costTotals = useMemo(() => computeTopLevelTotals(), []);
   const apqpSummary = useMemo(() => summarizeAPQP(), []);
+  const rfxSummary = useMemo(() => summarizeRfx(), []);
   const overTarget = useMemo(() => countOverTarget(), []);
+  const allItems = useMemo(() => flattenAll(), []);
   const openChanges = useMemo(
     () => PAST_CHANGES.filter((c) => c.status === "review").length,
     [],
   );
+  const designStats = useMemo(() => {
+    const leaves = allItems.filter((n) => !n.children?.length);
+    const completed = leaves.filter((n) => n.designStatus === "completed").length;
+    const inprogress = leaves.filter((n) => n.designStatus === "inprogress").length;
+    const pending = leaves.filter(
+      (n) => n.designStatus === "pending" || n.designStatus === "notstarted",
+    ).length;
+    const total = leaves.length;
+    return { completed, inprogress, pending, total };
+  }, [allItems]);
   const activeRfx = useMemo(
     () =>
       RFX_LIST.filter((r) =>
@@ -131,7 +152,7 @@ export function ProjectOverviewPage() {
 
   return (
     <>
-      {/* KPI strip — overview metrics */}
+      {/* Project vital signs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-lg mb-xl">
         <KpiCard
           label="Phase Progress"
@@ -181,6 +202,153 @@ export function ProjectOverviewPage() {
           }
           hint={`${decisions.length} decision${decisions.length === 1 ? "" : "s"} needed`}
         />
+      </div>
+
+      {/* Module snapshot — drill into each tab */}
+      <div className="mb-xl">
+        <div className="flex items-center justify-between mb-md">
+          <h2 className="text-xs font-bold uppercase tracking-wide text-text-secondary">
+            Module Snapshot
+          </h2>
+          <span className="text-xs text-text-secondary">
+            Click a card to open the full tab.
+          </span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-lg">
+          <ModuleCard
+            to={`/projects/${project.id}/cost`}
+            icon={DollarSign}
+            title="Cost"
+            tone={
+              costTotals.gap > 0
+                ? "error"
+                : costTotals.gap < 0
+                  ? "success"
+                  : "info"
+            }
+            primaryLabel="Gap vs Target"
+            primaryValue={`${costTotals.gap >= 0 ? "+" : ""}₩${KRW.format(costTotals.gap)}`}
+            primaryTrend={
+              costTotals.gap > 0
+                ? TrendingUp
+                : costTotals.gap < 0
+                  ? TrendingDown
+                  : null
+            }
+            stats={[
+              {
+                label: "Current",
+                value: `₩${KRW.format(costTotals.current)}`,
+              },
+              {
+                label: "Target",
+                value: `₩${KRW.format(costTotals.target)}`,
+              },
+              {
+                label: "Items over",
+                value: `${overTarget}`,
+                tone: overTarget > 0 ? "warning" : undefined,
+              },
+            ]}
+          />
+
+          <ModuleCard
+            to={`/projects/${project.id}/design`}
+            icon={Package}
+            title="Design"
+            tone={
+              designStats.total === 0
+                ? "info"
+                : designStats.completed / designStats.total > 0.85
+                  ? "success"
+                  : "info"
+            }
+            primaryLabel="Completion"
+            primaryValue={
+              designStats.total === 0
+                ? "—"
+                : `${Math.round((designStats.completed / designStats.total) * 100)}%`
+            }
+            stats={[
+              {
+                label: "Completed",
+                value: `${designStats.completed} / ${designStats.total}`,
+              },
+              {
+                label: "In progress",
+                value: `${designStats.inprogress}`,
+              },
+              {
+                label: "Open changes",
+                value: `${openChanges}`,
+                tone: openChanges > 0 ? "info" : undefined,
+              },
+            ]}
+          />
+
+          <ModuleCard
+            to={`/projects/${project.id}/sourcing`}
+            icon={Send}
+            title="Sourcing"
+            tone={
+              rfxSummary.pendingResponses > 0
+                ? "warning"
+                : rfxSummary.active > 0
+                  ? "info"
+                  : "success"
+            }
+            primaryLabel="Active RFx"
+            primaryValue={`${rfxSummary.active}`}
+            stats={[
+              {
+                label: "Pending responses",
+                value: `${rfxSummary.pendingResponses}`,
+                tone: rfxSummary.pendingResponses > 0 ? "warning" : undefined,
+              },
+              {
+                label: "Awarded",
+                value: `${rfxSummary.awarded}`,
+                tone: "success",
+              },
+              {
+                label: "Total RFx",
+                value: `${rfxSummary.total}`,
+              },
+            ]}
+          />
+
+          <ModuleCard
+            to={`/projects/${project.id}/quality`}
+            icon={ShieldCheck}
+            title="Quality (APQP)"
+            tone={
+              apqpSummary.highRisks > 0
+                ? "error"
+                : apqpSummary.firstPassRate > 0.85
+                  ? "success"
+                  : "warning"
+            }
+            primaryLabel="PPAP First-Pass"
+            primaryValue={`${Math.round(apqpSummary.firstPassRate * 100)}%`}
+            stats={[
+              {
+                label: "Open risks",
+                value: `${apqpSummary.totalRisks}`,
+                tone: apqpSummary.highRisks > 0 ? "error" : "warning",
+              },
+              {
+                label: "Q-BOM sync",
+                value: `${Math.round(apqpSummary.syncPct * 100)}%`,
+                tone:
+                  apqpSummary.syncPct < 1 ? "warning" : "success",
+              },
+              {
+                label: "Items tracked",
+                value: `${PPAP_PROGRESS.length}`,
+              },
+            ]}
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-lg mb-xl">
@@ -269,6 +437,85 @@ export function ProjectOverviewPage() {
         </div>
       </section>
     </>
+  );
+}
+
+function ModuleCard({
+  to,
+  icon: Icon,
+  title,
+  tone,
+  primaryLabel,
+  primaryValue,
+  primaryTrend: TrendIcon,
+  stats,
+}) {
+  const toneColor = {
+    success: "var(--color-success-main)",
+    warning: "var(--color-warning-main)",
+    error: "var(--color-error-main)",
+    info: "var(--color-info-main)",
+    primary: "var(--color-primary-main)",
+  }[tone] ?? "var(--color-text-primary)";
+
+  return (
+    <Link
+      to={to}
+      className="group block p-lg rounded-xl bg-surface-paper border border-border shadow-elevation-2 hover:shadow-elevation-16 transition-shadow duration-normal h-full"
+    >
+      <div className="flex items-start justify-between gap-sm mb-md">
+        <div className="flex items-center gap-sm">
+          <div
+            className="w-9 h-9 rounded-md flex items-center justify-center"
+            style={{ backgroundColor: `${toneColor}15` }}
+          >
+            <Icon size={16} style={{ color: toneColor }} />
+          </div>
+          <h3 className="text-h5">{title}</h3>
+        </div>
+        <ArrowRight
+          size={14}
+          className="text-text-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-fast"
+        />
+      </div>
+
+      <div className="mb-md">
+        <p className="text-[10px] uppercase tracking-wide text-text-secondary font-semibold">
+          {primaryLabel}
+        </p>
+        <p
+          className="text-h2 font-bold mt-2xs inline-flex items-center gap-xs"
+          style={{ color: toneColor, letterSpacing: "-0.02em" }}
+        >
+          {TrendIcon && <TrendIcon size={20} />}
+          {primaryValue}
+        </p>
+      </div>
+
+      <dl className="grid grid-cols-3 gap-sm pt-md border-t border-border">
+        {stats.map((s) => {
+          const subColor = {
+            success: "var(--color-success-main)",
+            warning: "var(--color-warning-main)",
+            error: "var(--color-error-main)",
+            info: "var(--color-info-main)",
+          }[s.tone];
+          return (
+            <div key={s.label}>
+              <dt className="text-[10px] uppercase tracking-wide text-text-secondary font-semibold truncate">
+                {s.label}
+              </dt>
+              <dd
+                className="text-sm font-bold font-mono mt-2xs truncate"
+                style={subColor ? { color: subColor } : undefined}
+              >
+                {s.value}
+              </dd>
+            </div>
+          );
+        })}
+      </dl>
+    </Link>
   );
 }
 
