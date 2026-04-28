@@ -28,6 +28,7 @@ import { useItemDetail } from "../context/ItemDetailContext.jsx";
 import { KpiCard } from "../components/KpiCard.jsx";
 import { Th } from "../components/Th.jsx";
 import { FilterSelect } from "../components/FilterSelect.jsx";
+import { PieChart } from "../components/PieChart.jsx";
 const DEFAULT_FILTER = { status: "all", category: "all" };
 
 export function DesignWorkspacePage() {
@@ -448,34 +449,31 @@ function ReadinessBreakdown({ summary }) {
   const total = summary.total || 1;
   return (
     <>
-      <div className="flex h-8 rounded-md overflow-hidden">
-        {items.map((it) => (
-          <div
-            key={it.label}
-            style={{
-              width: `${(it.value / total) * 100}%`,
-              backgroundColor: it.color,
-            }}
-            title={`${it.label}: ${it.value}`}
-          />
-        ))}
-      </div>
-      <div className="mt-md space-y-sm">
-        {items.map((it) => (
-          <div key={it.label} className="flex items-center gap-sm">
-            <span
-              className="inline-block w-2 h-2 rounded-full shrink-0"
-              style={{ backgroundColor: it.color }}
-            />
-            <span className="text-sm">{it.label}</span>
-            <span className="text-xs text-text-secondary ml-auto">
-              {Math.round((it.value / total) * 100)}%
-            </span>
-            <span className="text-sm font-bold font-mono tabular-nums w-8 text-right">
-              {it.value}
-            </span>
-          </div>
-        ))}
+      <div className="flex items-center gap-lg">
+        <PieChart
+          slices={items}
+          size={140}
+          strokeWidth={22}
+          centerValue={`${Math.round((summary.completed / total) * 100)}%`}
+          centerLabel="Completed"
+        />
+        <div className="flex-1 space-y-sm">
+          {items.map((it) => (
+            <div key={it.label} className="flex items-center gap-sm">
+              <span
+                className="inline-block w-2 h-2 rounded-full shrink-0"
+                style={{ backgroundColor: it.color }}
+              />
+              <span className="text-sm">{it.label}</span>
+              <span className="text-xs text-text-secondary ml-auto">
+                {Math.round((it.value / total) * 100)}%
+              </span>
+              <span className="text-sm font-bold font-mono tabular-nums w-8 text-right">
+                {it.value}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
       <p className="text-xs text-text-secondary mt-md">
         Design freeze gate checks all items completed · sourcing decided ·

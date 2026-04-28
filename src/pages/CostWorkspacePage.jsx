@@ -29,6 +29,7 @@ import { useItemDetail } from "../context/ItemDetailContext.jsx";
 import { KpiCard } from "../components/KpiCard.jsx";
 import { Th } from "../components/Th.jsx";
 import { FilterBtn } from "../components/FilterBtn.jsx";
+import { PieChart } from "../components/PieChart.jsx";
 const KRW = new Intl.NumberFormat("en-US");
 
 export function CostWorkspacePage() {
@@ -269,7 +270,7 @@ export function CostWorkspacePage() {
   );
 }
 
-/* ───────────────────── Cost Structure bar ───────────────────── */
+/* ───────────────────── Cost Structure donut ───────────────────── */
 
 function StackedBar({ structure }) {
   const parts = [
@@ -295,18 +296,17 @@ function StackedBar({ structure }) {
       color: "var(--color-warning-main)",
     },
   ];
+  const total = parts.reduce((s, p) => s + p.value, 0);
   return (
-    <>
-      <div className="flex h-6 rounded-sm overflow-hidden">
-        {parts.map((p) => (
-          <div
-            key={p.key}
-            style={{ backgroundColor: p.color, width: `${p.pct * 100}%` }}
-            title={`${p.label}: ₩${KRW.format(p.value)}`}
-          />
-        ))}
-      </div>
-      <div className="mt-md space-y-sm">
+    <div className="flex items-center gap-lg">
+      <PieChart
+        slices={parts}
+        size={140}
+        strokeWidth={22}
+        centerValue={`${Math.round(parts[0].pct * 100)}%`}
+        centerLabel="Material"
+      />
+      <div className="flex-1 space-y-sm">
         {parts.map((p) => (
           <div key={p.key} className="flex items-center gap-sm">
             <span
@@ -315,7 +315,7 @@ function StackedBar({ structure }) {
             />
             <span className="text-sm text-text-primary">{p.label}</span>
             <span className="text-xs text-text-secondary ml-auto">
-              {Math.round(p.pct * 100)}%
+              {total > 0 ? Math.round((p.value / total) * 100) : 0}%
             </span>
             <span className="text-sm font-bold font-mono tabular-nums w-28 text-right">
               ₩{KRW.format(p.value)}
@@ -323,7 +323,7 @@ function StackedBar({ structure }) {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }
 

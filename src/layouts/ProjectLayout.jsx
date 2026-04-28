@@ -204,18 +204,16 @@ export function ProjectLayout() {
             </div>
           </div>
 
-          {/* Phase stepper */}
-          <div className="mt-lg pt-lg border-t border-border">
-            <div className="flex items-center justify-between mb-sm">
-              <span className="text-xs font-bold uppercase tracking-wide text-text-secondary">
-                Phase Progression
-              </span>
-              <span className="text-xs text-text-secondary">
-                Currently in{" "}
-                <b className="text-text-primary">{phaseMeta?.label}</b>
-              </span>
-            </div>
-            <PhaseStepper currentPhase={project.phase} size="md" />
+          {/* Phase stepper — inline with current phase label */}
+          <div className="mt-md flex items-center gap-md flex-wrap">
+            <span className="text-xs font-bold uppercase tracking-wide text-text-secondary">
+              Phase
+            </span>
+            <PhaseStepper currentPhase={project.phase} size="sm" />
+            <span className="text-xs text-text-secondary">
+              <b className="text-text-primary">{phaseMeta?.label}</b> ·{" "}
+              {Math.round(project.phaseProgress * 100)}% complete · hover for stage
+            </span>
           </div>
         </div>
 
