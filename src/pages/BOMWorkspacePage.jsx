@@ -62,6 +62,50 @@ const DELTA_STYLE = {
 
 const KRW = new Intl.NumberFormat("ko-KR");
 
+/**
+ * Walk the full tree and emit every node with its depth so non-tree
+ * views (Sourcing / Q-BOM / Part List) can filter without re-walking.
+ */
+function flattenAllNodes(nodes, depth = 0, out = []) {
+  for (const n of nodes) {
+    out.push({ ...n, depth });
+    if (n.children) flattenAllNodes(n.children, depth + 1, out);
+  }
+  return out;
+}
+
+/**
+ * Per docs/03_bom-product-definition.md:
+ *  - E-BOM        : engineering hierarchy (tree)
+ *  - Sourcing BOM : end items only (buyMode !== INHOUSE), flattened
+ *  - Q-BOM        : end items × supplier with PPAP emphasis
+ *  - Part List    : leaf-level parts only, no hierarchy
+ */
+function getRowsForView(view, expandedIds) {
+  if (view === "ebom") {
+    return flattenBOM(BOM_NODES, expandedIds);
+  }
+  const all = flattenAllNodes(BOM_NODES);
+  if (view === "sourcing") {
+    return all
+      .filter((n) => n.buyMode && n.buyMode !== "INHOUSE")
+      .map((n) => ({ ...n, depth: 0, hasChildren: false }));
+  }
+  if (view === "qbom") {
+    return all
+      .filter(
+        (n) => n.buyMode && n.buyMode !== "INHOUSE" && n.supplier,
+      )
+      .map((n) => ({ ...n, depth: 0, hasChildren: false }));
+  }
+  if (view === "partlist") {
+    return all
+      .filter((n) => !n.children?.length)
+      .map((n) => ({ ...n, depth: 0, hasChildren: false }));
+  }
+  return [];
+}
+
 export function BOMWorkspacePage() {
   const [view, setView] = useState("ebom");
   const [version, setVersion] = useState(BOM_META.currentVersion);
@@ -92,16 +136,18 @@ export function BOMWorkspacePage() {
   };
 
   const rows = useMemo(() => {
-    const flat = flattenBOM(BOM_NODES, expandedIds);
-    if (!query.trim()) return flat;
+    const base = getRowsForView(view, expandedIds);
+    if (!query.trim()) return base;
     const q = query.toLowerCase();
-    return flat.filter(
+    return base.filter(
       (r) =>
         r.code.toLowerCase().includes(q) ||
         r.name.toLowerCase().includes(q) ||
         (r.supplier ?? "").toLowerCase().includes(q),
     );
-  }, [expandedIds, query]);
+  }, [view, expandedIds, query]);
+
+  const isTreeView = view === "ebom";
 
   const toggle = (id) =>
     setExpandedIds((prev) => {
@@ -268,21 +314,23 @@ export function BOMWorkspacePage() {
               </span>
             )}
           </div>
-          <div className="flex items-center gap-sm">
-            <button
-              onClick={expandAll}
-              className="hover:text-text-primary transition-colors duration-fast"
-            >
-              Expand all
-            </button>
-            <span className="opacity-30">|</span>
-            <button
-              onClick={collapseAll}
-              className="hover:text-text-primary transition-colors duration-fast"
-            >
-              Collapse all
-            </button>
-          </div>
+          {isTreeView && (
+            <div className="flex items-center gap-sm">
+              <button
+                onClick={expandAll}
+                className="hover:text-text-primary transition-colors duration-fast"
+              >
+                Expand all
+              </button>
+              <span className="opacity-30">|</span>
+              <button
+                onClick={collapseAll}
+                className="hover:text-text-primary transition-colors duration-fast"
+              >
+                Collapse all
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Table */}
